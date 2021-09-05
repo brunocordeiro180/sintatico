@@ -1,0 +1,11 @@
+Para executar o programa abra este diretório pelo seu terminal e em seguida digite:
+
+make
+
+O comando irá gerar um executável chamado "tradutor". Execute o programa passando como argumento um dos arquivos de teste que se encontram na pasta "tests", como no exemplo abaixo:
+
+./tradutor < teste1.txt
+
+O programa em seguida irá listar os tokens encontrados no arquivo, assim como erros léxicos que o mesmo contêm.
+
+PS: Meu trabalho ainda está muito incompleto, me desculpe.

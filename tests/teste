@@ -1,0 +1,17 @@
+int list IL;
+float list FL;
+
+int read_list(int n, int y) {
+
+    int i;
+	i =  -435.7;
+	int list new;
+	new = NIL;
+	for (i = 0; i < n ; i = i + 1) {
+		int elem;
+		writeln("Digite o elemento da lista: ");
+		read(elem);
+	}
+	return new;
+}
+
