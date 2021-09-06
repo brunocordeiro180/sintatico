@@ -69,14 +69,15 @@ extern int yydebug;
     NIL = 270,                     /* NIL  */
     RETURN = 271,                  /* RETURN  */
     TYPE = 272,                    /* TYPE  */
-    LIST_OP = 273,                 /* LIST_OP  */
-    UNARY_LIST_OP = 274,           /* UNARY_LIST_OP  */
-    LOG_OP = 275,                  /* LOG_OP  */
-    EXCLAMATION = 276,             /* EXCLAMATION  */
-    SUM_OP = 277,                  /* SUM_OP  */
-    MUL_OP = 278,                  /* MUL_OP  */
-    REL_OP = 279,                  /* REL_OP  */
-    UNARY_LOG_OP = 280             /* UNARY_LOG_OP  */
+    MAP = 273,                     /* MAP  */
+    FILTER = 274,                  /* FILTER  */
+    UNARY_LIST_OP = 275,           /* UNARY_LIST_OP  */
+    LOG_OP = 276,                  /* LOG_OP  */
+    EXCLAMATION = 277,             /* EXCLAMATION  */
+    SUM_OP = 278,                  /* SUM_OP  */
+    MUL_OP = 279,                  /* MUL_OP  */
+    REL_OP = 280,                  /* REL_OP  */
+    UNARY_LOG_OP = 281             /* UNARY_LOG_OP  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -94,7 +95,7 @@ union YYSTYPE
 		char lexeme[100];
 	} token;
 
-#line 98 "src/bison/bison.tab.h"
+#line 99 "src/bison/bison.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

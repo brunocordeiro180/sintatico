@@ -22,8 +22,8 @@ extern int scopeId;
 %token <token> ASSIGN FOR
 %token <token> LIST_CONSTRUCTOR NIL
 %token <token> RETURN TYPE
-%token <token> LIST_OP UNARY_LIST_OP LOG_OP EXCLAMATION SUM_OP MUL_OP REL_OP UNARY_LOG_OP
-%token <token> ';' ',' '(' ')' '{' '}'
+%token <token> MAP FILTER UNARY_LIST_OP LOG_OP EXCLAMATION SUM_OP MUL_OP REL_OP UNARY_LOG_OP
+%token <token> ';' ',' '(' ')' '{' '}' ':' '?' '%'
 
 
 %union{
@@ -118,8 +118,8 @@ stmt_list:
 ;
 
 if_stmt:
-	IF '(' bin_exp ')' block_stmt
-	| IF '(' bin_exp ')' block_stmt ELSE block_stmt
+	IF '(' bin_exp ')' statement
+	| IF '(' bin_exp ')' block_stmt ELSE statement
 ;
 
 return_stmt:
@@ -145,12 +145,11 @@ simple_exp:
 ;
 
 list_exp:
-	list_exp LIST_OP unary_list_exp
-	| unary_list_exp
-;
-
-unary_list_exp:
-	UNARY_LIST_OP ID
+	factor ':' factor
+	| '?' factor 
+	| '%' factor 
+	| factor MAP factor
+	| factor FILTER factor
 ;
 
 bin_exp:

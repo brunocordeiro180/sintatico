@@ -955,7 +955,7 @@ YY_RULE_SETUP
     yylval.token.line = linhas;
     yylval.token.column = colunas;
     colunas+=yyleng;
-    return LIST_OP;
+    return ':';
 }
 	YY_BREAK
 case 11:
@@ -966,7 +966,7 @@ YY_RULE_SETUP
     yylval.token.line = linhas;
     yylval.token.column = colunas;
     colunas+=yyleng;
-    return UNARY_LIST_OP;
+    return '?';
 }
 	YY_BREAK
 case 12:
@@ -977,7 +977,7 @@ YY_RULE_SETUP
     yylval.token.line = linhas;
     yylval.token.column = colunas;
     colunas+=yyleng;
-    return LIST_OP;
+    return FILTER;
 }
 	YY_BREAK
 case 13:
@@ -988,7 +988,7 @@ YY_RULE_SETUP
     yylval.token.line = linhas;
     yylval.token.column = colunas;
     colunas+=yyleng;
-    return LIST_OP;
+    return MAP;
 }
 	YY_BREAK
 case 14:

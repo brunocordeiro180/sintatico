@@ -129,7 +129,7 @@ ID_NAO_PERMITIDO            [0-9]+{IDENTIFICADOR}|[0-9]+{TIPO_DADO}|[0-9]+{PALAV
     yylval.token.line = linhas;
     yylval.token.column = colunas;
     colunas+=yyleng;
-    return LIST_OP;
+    return ':';
 }
 
 "?"                     { 
@@ -137,7 +137,7 @@ ID_NAO_PERMITIDO            [0-9]+{IDENTIFICADOR}|[0-9]+{TIPO_DADO}|[0-9]+{PALAV
     yylval.token.line = linhas;
     yylval.token.column = colunas;
     colunas+=yyleng;
-    return UNARY_LIST_OP;
+    return '?';
 }
 
 ">>"                    { 
@@ -145,7 +145,7 @@ ID_NAO_PERMITIDO            [0-9]+{IDENTIFICADOR}|[0-9]+{TIPO_DADO}|[0-9]+{PALAV
     yylval.token.line = linhas;
     yylval.token.column = colunas;
     colunas+=yyleng;
-    return LIST_OP;
+    return FILTER;
 }
 
 "<<"                    { 
@@ -153,7 +153,7 @@ ID_NAO_PERMITIDO            [0-9]+{IDENTIFICADOR}|[0-9]+{TIPO_DADO}|[0-9]+{PALAV
     yylval.token.line = linhas;
     yylval.token.column = colunas;
     colunas+=yyleng;
-    return LIST_OP;
+    return MAP;
 }
 
 "!"                     { 
