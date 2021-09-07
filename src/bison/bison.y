@@ -3,6 +3,8 @@
 %{
 #include "scope.stack.h"
 #include "symbol.table.h"
+#include "token.h"
+#include "node.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -13,7 +15,7 @@ extern int yylex_destroy();
 extern void yyerror(const char* s);
 extern int scopeStack[100];
 extern int scopeId;
-
+extern Node *tree;
 %}
 
 %token <token> STRING ID INT FLOAT
@@ -25,30 +27,75 @@ extern int scopeId;
 %token <token> MAP FILTER UNARY_LIST_OP LOG_OP EXCLAMATION SUM_OP MUL_OP REL_OP UNARY_LOG_OP
 %token <token> ';' ',' '(' ')' '{' '}' ':' '?' '%'
 
+%type <node> S
+%type <node> decl_list
+%type <node> decl
+%type <node> var_decl
+%type <node> fun_decl
+%type <node> params
+%type <node> param_decl
+%type <node> statement
+%type <node> for_stmt
+%type <node> exp_stmt
+%type <node> exp
+%type <node> assing_exp
+%type <node> block_stmt
+%type <node> stmt_list
+%type <node> if_stmt
+%type <node> return_stmt
+%type <node> write_stmt
+%type <node> writeln_stmt
+%type <node> read_stmt
+%type <node> simple_exp
+%type <node> list_exp
+%type <node> bin_exp
+%type <node> unary_log_exp
+%type <node> rel_exp
+%type <node> sum_exp
+%type <node> mul_exp
+%type <node> factor
+%type <node> immutable
+%type <node> call
+%type <node> args
+%type <node> constant 
+
+
+%code requires {
+    #include "token.h"
+	#include "node.h"
+}
 
 %union{
-	struct Token{
-		int line;
-		int column;
-		int scope;
-		char lexeme[100];
-	} token;
+	Token token;
+	Node* node;
 }
 
 %%
 
 S:
-  decl_list
+  decl_list {
+	  tree = $$;
+  }
 ;
 
 decl_list:
-	decl_list decl 
-	| decl
+	decl_list decl {
+		$$ = createNode("decl_list", 1);
+		$$->leaf1 = $1;
+		$$->leaf2 = $2;
+	}
+	| decl {
+		$$ = $1;
+	}
 ;
 
 decl: 
-	var_decl 
-	| fun_decl 
+	var_decl {
+		$$ = createNode("var_decl", 1);
+	}
+	| fun_decl {
+		$$ = createNode("fun_decl", 1);
+	}
 ;
 
 var_decl:
@@ -216,8 +263,10 @@ extern void yyerror(const char* s)
 
 int main(int argc, char **argv){
 	initializeTable(symbolTable);
+	initializeList();
 	initializeScopeStack(scopeStack);
     yyparse();
+	printTree();
 	printSymbolTable(symbolTable);
     yylex_destroy();
     return 0;

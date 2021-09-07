@@ -44,6 +44,13 @@
 #if YYDEBUG
 extern int yydebug;
 #endif
+/* "%code requires" blocks.  */
+#line 63 "src/bison/bison.y"
+
+    #include "token.h"
+	#include "node.h"
+
+#line 54 "src/bison/bison.tab.h"
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE
@@ -86,16 +93,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 29 "src/bison/bison.y"
+#line 68 "src/bison/bison.y"
 
-	struct Token{
-		int line;
-		int column;
-		int scope;
-		char lexeme[100];
-	} token;
+	Token token;
+	Node* node;
 
-#line 99 "src/bison/bison.tab.h"
+#line 102 "src/bison/bison.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

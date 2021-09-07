@@ -71,6 +71,8 @@
 
 #include "scope.stack.h"
 #include "symbol.table.h"
+#include "token.h"
+#include "node.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -81,9 +83,9 @@ extern int yylex_destroy();
 extern void yyerror(const char* s);
 extern int scopeStack[100];
 extern int scopeId;
+extern Node *tree;
 
-
-#line 87 "src/bison/bison.tab.c"
+#line 89 "src/bison/bison.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -561,14 +563,14 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    41,    41,    45,    46,    50,    51,    55,    61,    64,
-      70,    71,    75,    81,    82,    83,    84,    85,    86,    87,
-      88,    89,    93,    97,    98,   102,   103,   107,   111,   115,
-     116,   117,   121,   122,   126,   127,   131,   135,   139,   143,
-     144,   148,   149,   150,   151,   152,   156,   157,   161,   162,
-     163,   167,   168,   172,   173,   177,   178,   179,   183,   184,
-     188,   189,   190,   194,   195,   199,   200,   204,   205,   206,
-     207
+       0,    76,    76,    82,    87,    93,    96,   102,   108,   111,
+     117,   118,   122,   128,   129,   130,   131,   132,   133,   134,
+     135,   136,   140,   144,   145,   149,   150,   154,   158,   162,
+     163,   164,   168,   169,   173,   174,   178,   182,   186,   190,
+     191,   195,   196,   197,   198,   199,   203,   204,   208,   209,
+     210,   214,   215,   219,   220,   224,   225,   226,   230,   231,
+     235,   236,   237,   241,   242,   246,   247,   251,   252,   253,
+     254
 };
 #endif
 
@@ -2100,40 +2102,82 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
+  case 2: /* S: decl_list  */
+#line 76 "src/bison/bison.y"
+            {
+	  tree = (yyval.node);
+  }
+#line 2111 "src/bison/bison.tab.c"
+    break;
+
+  case 3: /* decl_list: decl_list decl  */
+#line 82 "src/bison/bison.y"
+                       {
+		(yyval.node) = createNode("decl_list", 1);
+		(yyval.node)->leaf1 = (yyvsp[-1].node);
+		(yyval.node)->leaf2 = (yyvsp[0].node);
+	}
+#line 2121 "src/bison/bison.tab.c"
+    break;
+
+  case 4: /* decl_list: decl  */
+#line 87 "src/bison/bison.y"
+               {
+		(yyval.node) = (yyvsp[0].node);
+	}
+#line 2129 "src/bison/bison.tab.c"
+    break;
+
+  case 5: /* decl: var_decl  */
+#line 93 "src/bison/bison.y"
+                 {
+		(yyval.node) = createNode("var_decl", 1);
+	}
+#line 2137 "src/bison/bison.tab.c"
+    break;
+
+  case 6: /* decl: fun_decl  */
+#line 96 "src/bison/bison.y"
+                   {
+		(yyval.node) = createNode("fun_decl", 1);
+	}
+#line 2145 "src/bison/bison.tab.c"
+    break;
+
   case 7: /* var_decl: TYPE ID ';'  */
-#line 55 "src/bison/bison.y"
+#line 102 "src/bison/bison.y"
                     {
 		insertSymbol(symbolTable, (yyvsp[-1].token).lexeme, (yyvsp[-1].token).line, (yyvsp[-1].token).column, (yyvsp[-2].token).lexeme, "var", (yyvsp[-1].token).scope);
 	}
-#line 2109 "src/bison/bison.tab.c"
+#line 2153 "src/bison/bison.tab.c"
     break;
 
   case 8: /* fun_decl: TYPE ID '(' params ')' block_stmt  */
-#line 61 "src/bison/bison.y"
+#line 108 "src/bison/bison.y"
                                           {
 		insertSymbol(symbolTable, (yyvsp[-4].token).lexeme, (yyvsp[-4].token).line, (yyvsp[-4].token).column, (yyvsp[-5].token).lexeme, "fun",(yyvsp[-4].token).scope);
 	}
-#line 2117 "src/bison/bison.tab.c"
+#line 2161 "src/bison/bison.tab.c"
     break;
 
   case 9: /* fun_decl: TYPE ID '(' ')' block_stmt  */
-#line 64 "src/bison/bison.y"
+#line 111 "src/bison/bison.y"
                                      {
 		insertSymbol(symbolTable, (yyvsp[-3].token).lexeme, (yyvsp[-3].token).line, (yyvsp[-3].token).column, (yyvsp[-4].token).lexeme, "fun", (yyvsp[-3].token).scope);
 	}
-#line 2125 "src/bison/bison.tab.c"
+#line 2169 "src/bison/bison.tab.c"
     break;
 
   case 12: /* param_decl: TYPE ID  */
-#line 75 "src/bison/bison.y"
+#line 122 "src/bison/bison.y"
                 {
 		insertSymbol(symbolTable, (yyvsp[0].token).lexeme, (yyvsp[0].token).line, (yyvsp[0].token).column, (yyvsp[-1].token).lexeme, "param", (scopeId + 1));
 	}
-#line 2133 "src/bison/bison.tab.c"
+#line 2177 "src/bison/bison.tab.c"
     break;
 
 
-#line 2137 "src/bison/bison.tab.c"
+#line 2181 "src/bison/bison.tab.c"
 
       default: break;
     }
@@ -2358,7 +2402,7 @@ yyreturn:
   return yyresult;
 }
 
-#line 210 "src/bison/bison.y"
+#line 257 "src/bison/bison.y"
 
 
 extern void yyerror(const char* s)
@@ -2368,8 +2412,10 @@ extern void yyerror(const char* s)
 
 int main(int argc, char **argv){
 	initializeTable(symbolTable);
+	initializeList();
 	initializeScopeStack(scopeStack);
     yyparse();
+	printTree();
 	printSymbolTable(symbolTable);
     yylex_destroy();
     return 0;

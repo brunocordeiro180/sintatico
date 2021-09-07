@@ -160,97 +160,97 @@ Não terminais com as regras onde eles aparecem
 
     $accept (36)
         à esquerda: 0
-    S (37)
+    S <node> (37)
         à esquerda: 1
         à direita: 0
-    decl_list (38)
+    decl_list <node> (38)
         à esquerda: 2 3
         à direita: 1 2
-    decl (39)
+    decl <node> (39)
         à esquerda: 4 5
         à direita: 2 3
-    var_decl (40)
+    var_decl <node> (40)
         à esquerda: 6
         à direita: 4 19
-    fun_decl (41)
+    fun_decl <node> (41)
         à esquerda: 7 8
         à direita: 5
-    params (42)
+    params <node> (42)
         à esquerda: 9 10
         à direita: 7 9
-    param_decl (43)
+    param_decl <node> (43)
         à esquerda: 11
         à direita: 9 10
-    statement (44)
+    statement <node> (44)
         à esquerda: 12 13 14 15 16 17 18 19 20
         à direita: 29 30 31 32
-    for_stmt (45)
+    for_stmt <node> (45)
         à esquerda: 21
         à direita: 20
-    exp_stmt (46)
+    exp_stmt <node> (46)
         à esquerda: 22 23
         à direita: 12
-    exp (47)
+    exp <node> (47)
         à esquerda: 24 25
         à direita: 22 26 34
-    assing_exp (48)
+    assing_exp <node> (48)
         à esquerda: 26
         à direita: 21 24
-    block_stmt (49)
+    block_stmt <node> (49)
         à esquerda: 27
         à direita: 7 8 13 21 32
-    stmt_list (50)
+    stmt_list <node> (50)
         à esquerda: 28 29 30
         à direita: 27 29
-    if_stmt (51)
+    if_stmt <node> (51)
         à esquerda: 31 32
         à direita: 14
-    return_stmt (52)
+    return_stmt <node> (52)
         à esquerda: 33 34
         à direita: 15
-    write_stmt (53)
+    write_stmt <node> (53)
         à esquerda: 35
         à direita: 16
-    writeln_stmt (54)
+    writeln_stmt <node> (54)
         à esquerda: 36
         à direita: 17
-    read_stmt (55)
+    read_stmt <node> (55)
         à esquerda: 37
         à direita: 18
-    simple_exp (56)
+    simple_exp <node> (56)
         à esquerda: 38 39
         à direita: 25 35 36 59 64 65
-    list_exp (57)
+    list_exp <node> (57)
         à esquerda: 40 41 42 43 44
         à direita: 39
-    bin_exp (58)
+    bin_exp <node> (58)
         à esquerda: 45 46
         à direita: 31 32 38 45
-    unary_log_exp (59)
+    unary_log_exp <node> (59)
         à esquerda: 47 48 49
         à direita: 45 46 47 48
-    rel_exp (60)
+    rel_exp <node> (60)
         à esquerda: 50 51
         à direita: 21 49 50
-    sum_exp (61)
+    sum_exp <node> (61)
         à esquerda: 52 53
         à direita: 50 51 52
-    mul_exp (62)
+    mul_exp <node> (62)
         à esquerda: 54 55 56
         à direita: 52 53 54
-    factor (63)
+    factor <node> (63)
         à esquerda: 57 58
         à direita: 40 41 42 43 44 54 55 56
-    immutable (64)
+    immutable <node> (64)
         à esquerda: 59 60 61
         à direita: 57
-    call (65)
+    call <node> (65)
         à esquerda: 62 63
         à direita: 60
-    args (66)
+    args <node> (66)
         à esquerda: 64 65
         à direita: 62 64
-    constant (67)
+    constant <node> (67)
         à esquerda: 66 67 68 69
         à direita: 61
 
