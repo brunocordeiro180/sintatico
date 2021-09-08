@@ -45,7 +45,7 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 63 "src/bison/bison.y"
+#line 69 "src/bison/bison.y"
 
     #include "token.h"
 	#include "node.h"
@@ -61,30 +61,29 @@ extern int yydebug;
     YYEOF = 0,                     /* "end of file"  */
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
-    STRING = 258,                  /* STRING  */
-    ID = 259,                      /* ID  */
-    INT = 260,                     /* INT  */
-    FLOAT = 261,                   /* FLOAT  */
-    WRITE = 262,                   /* WRITE  */
-    WRITELN = 263,                 /* WRITELN  */
-    READ = 264,                    /* READ  */
-    IF = 265,                      /* IF  */
-    ELSE = 266,                    /* ELSE  */
-    ASSIGN = 267,                  /* ASSIGN  */
-    FOR = 268,                     /* FOR  */
-    LIST_CONSTRUCTOR = 269,        /* LIST_CONSTRUCTOR  */
-    NIL = 270,                     /* NIL  */
-    RETURN = 271,                  /* RETURN  */
-    TYPE = 272,                    /* TYPE  */
-    MAP = 273,                     /* MAP  */
-    FILTER = 274,                  /* FILTER  */
-    UNARY_LIST_OP = 275,           /* UNARY_LIST_OP  */
+    ID = 258,                      /* ID  */
+    INT = 259,                     /* INT  */
+    FLOAT = 260,                   /* FLOAT  */
+    NIL = 261,                     /* NIL  */
+    IF = 262,                      /* IF  */
+    ELSE = 263,                    /* ELSE  */
+    ASSIGN = 264,                  /* ASSIGN  */
+    FOR = 265,                     /* FOR  */
+    RETURN = 266,                  /* RETURN  */
+    TYPE = 267,                    /* TYPE  */
+    WRITE = 268,                   /* WRITE  */
+    WRITELN = 269,                 /* WRITELN  */
+    READ = 270,                    /* READ  */
+    MUL_OP = 271,                  /* MUL_OP  */
+    SUM_OP = 272,                  /* SUM_OP  */
+    REL_OP = 273,                  /* REL_OP  */
+    UNARY_LOG_OP = 274,            /* UNARY_LOG_OP  */
+    EXCLAMATION = 275,             /* EXCLAMATION  */
     LOG_OP = 276,                  /* LOG_OP  */
-    EXCLAMATION = 277,             /* EXCLAMATION  */
-    SUM_OP = 278,                  /* SUM_OP  */
-    MUL_OP = 279,                  /* MUL_OP  */
-    REL_OP = 280,                  /* REL_OP  */
-    UNARY_LOG_OP = 281             /* UNARY_LOG_OP  */
+    MAP = 277,                     /* MAP  */
+    FILTER = 278,                  /* FILTER  */
+    THEN = 279,                    /* THEN  */
+    STRING = 280                   /* STRING  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -93,12 +92,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 68 "src/bison/bison.y"
+#line 74 "src/bison/bison.y"
 
 	Token token;
 	Node* node;
 
-#line 102 "src/bison/bison.tab.h"
+#line 101 "src/bison/bison.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

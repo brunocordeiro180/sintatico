@@ -1021,7 +1021,7 @@ YY_RULE_SETUP
     yylval.token.line = linhas;
     yylval.token.column = colunas;
     colunas+=yyleng;
-    return UNARY_LIST_OP;
+    return '%';
 }
 	YY_BREAK
 case 17:

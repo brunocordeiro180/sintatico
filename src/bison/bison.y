@@ -18,14 +18,20 @@ extern int scopeId;
 extern Node *tree;
 %}
 
-%token <token> STRING ID INT FLOAT
-%token <token> WRITE WRITELN READ
+%token <token> ID INT FLOAT NIL
 %token <token> IF ELSE
 %token <token> ASSIGN FOR
-%token <token> LIST_CONSTRUCTOR NIL
 %token <token> RETURN TYPE
-%token <token> MAP FILTER UNARY_LIST_OP LOG_OP EXCLAMATION SUM_OP MUL_OP REL_OP UNARY_LOG_OP
-%token <token> ';' ',' '(' ')' '{' '}' ':' '?' '%'
+%token <token> WRITE WRITELN READ
+%token <token> MUL_OP
+%token <token> SUM_OP 
+%token <token> REL_OP
+%token <token> UNARY_LOG_OP EXCLAMATION
+%token <token> LOG_OP 
+%token <token> ':' '?' '%' MAP FILTER
+%right THEN ELSE
+%token <token> STRING 
+%token <token> ';' ',' '(' ')' '{' '}'
 
 %type <node> S
 %type <node> decl_list
@@ -160,13 +166,13 @@ block_stmt:
 
 
 stmt_list:
-	|statement stmt_list
-	|statement
+	stmt_list statement
+	|%empty
 ;
 
 if_stmt:
-	IF '(' bin_exp ')' statement
-	| IF '(' bin_exp ')' block_stmt ELSE statement
+	IF '(' bin_exp ')' statement %prec THEN
+	| IF '(' bin_exp ')' statement ELSE statement
 ;
 
 return_stmt:
