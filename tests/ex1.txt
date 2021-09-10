@@ -6,12 +6,6 @@ int list read_list(int n) {
 	i =  -435.7;
 	int list new;
 	new = NIL;
-	for (i = 0; i < n ; i = i + 1) {
-		int elem;
-		writeln("Digite o elemento da lista: ");
-		read(elem);
-		new = elem : new;
-	}
 	return new;
 }
 

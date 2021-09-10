@@ -2,47 +2,64 @@
 #include <stdlib.h>
 #include <string.h>
 #include "node.h"
+#include "symbol.table.h"
+
+#define BHMAG "\e[1;95m"
+#define RESET "\e[0m"
 
 Node *tree;
-ListNode *listNode;
 
-extern Node* createNode(char* name, int depth){
+extern Node* createNode(char* name){
     Node *node = (Node *) malloc(sizeof(Node));
     strcpy(node->name, name);
+    
     node->leaf1 = NULL;
     node->leaf2 = NULL;
     node->leaf3 = NULL;
-    node->depth = depth;
+    node->leaf4 = NULL;
+    node->leaf5 = NULL;
 
-    addToList(node);
-
+    node->token = NULL;
     return node;
 }
 
-extern void initializeList(){
-    listNode = (ListNode *) malloc(sizeof(ListNode));
-    Node *node = (Node *) malloc(sizeof(Node));
-    listNode->val = node;
-    listNode->next = NULL;
-}
 
-extern void addToList(Node *node){
-    ListNode* current = listNode;
-    
-    while(current->next != NULL){
-        current = current->next;
+extern void printTree(Node* node, int depth) {
+    if(node == NULL){
+        return;
     }
 
-    current->next = (ListNode *) malloc(sizeof(ListNode));
-    current->next->val = node;
-    current->next->next = NULL;
-}
+    if (strcmp(node->name, "\0") != 0) {
+        
+        for(int i = 0; i< depth; i++){
+            printf("-");
+        }
 
-extern void printTree() {
-    ListNode * current = listNode;
+        printf("%s\n", node->name);
+    }
 
-    while (current != NULL) {
-        printf("%s\n", current->val->name);
-        current = current->next;
+    if(node->token){
+        for(int i = 0; i< depth; i++){
+            printf(BHMAG"-"RESET);
+        }
+
+        printf(BHMAG"%s "RESET, node->token->lexeme);
+        printf(BHMAG"(%d,%d)\n"RESET, node->token->line, node->token->column);
+    }
+
+    if(node->leaf1){
+        printTree(node->leaf1, depth + 1);
+    }
+    if(node->leaf2){
+        printTree(node->leaf2, depth + 1);
+    }
+    if(node->leaf3){
+        printTree(node->leaf3, depth + 1);
+    }
+    if(node->leaf4){
+        printTree(node->leaf4, depth + 1);
+    }
+     if(node->leaf5){
+        printTree(node->leaf5, depth + 1);
     }
 }

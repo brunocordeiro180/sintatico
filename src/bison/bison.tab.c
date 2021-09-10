@@ -75,6 +75,7 @@
 #include "node.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 Symbol symbolTable[1000];
 
@@ -85,7 +86,7 @@ extern int scopeStack[100];
 extern int scopeId;
 extern Node *tree;
 
-#line 89 "src/bison/bison.tab.c"
+#line 90 "src/bison/bison.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -562,13 +563,13 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,    82,    82,    88,    93,    99,   102,   108,   114,   117,
-     123,   124,   128,   134,   135,   136,   137,   138,   139,   140,
-     141,   142,   146,   150,   151,   155,   156,   160,   164,   169,
-     170,   174,   175,   179,   180,   184,   188,   192,   196,   197,
-     201,   202,   203,   204,   205,   209,   210,   214,   215,   216,
-     220,   221,   225,   226,   230,   231,   232,   236,   237,   241,
-     242,   243,   247,   248,   252,   253,   257,   258,   259,   260
+       0,    83,    83,    89,    94,   100,   103,   109,   125,   141,
+     159,   162,   169,   181,   184,   187,   190,   193,   196,   199,
+     202,   206,   212,   227,   230,   236,   239,   245,   261,   268,
+     273,   277,   287,   302,   310,   322,   334,   346,   366,   369,
+     375,   381,   386,   391,   397,   406,   407,   413,   414,   415,
+     421,   427,   433,   439,   445,   452,   455,   463,   466,   473,
+     476,   479,   485,   490,   497,   498,   502,   506,   510,   514
 };
 #endif
 
@@ -2292,81 +2293,655 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* S: decl_list  */
-#line 82 "src/bison/bison.y"
+#line 83 "src/bison/bison.y"
             {
 	  tree = (yyval.node);
   }
-#line 2300 "src/bison/bison.tab.c"
+#line 2301 "src/bison/bison.tab.c"
     break;
 
   case 3: /* decl_list: decl_list decl  */
-#line 88 "src/bison/bison.y"
+#line 89 "src/bison/bison.y"
                        {
-		(yyval.node) = createNode("decl_list", 1);
+		(yyval.node) = createNode("decl_list");
 		(yyval.node)->leaf1 = (yyvsp[-1].node);
 		(yyval.node)->leaf2 = (yyvsp[0].node);
 	}
-#line 2310 "src/bison/bison.tab.c"
+#line 2311 "src/bison/bison.tab.c"
     break;
 
   case 4: /* decl_list: decl  */
-#line 93 "src/bison/bison.y"
+#line 94 "src/bison/bison.y"
                {
 		(yyval.node) = (yyvsp[0].node);
 	}
-#line 2318 "src/bison/bison.tab.c"
+#line 2319 "src/bison/bison.tab.c"
     break;
 
   case 5: /* decl: var_decl  */
-#line 99 "src/bison/bison.y"
+#line 100 "src/bison/bison.y"
                  {
-		(yyval.node) = createNode("var_decl", 1);
+		(yyval.node) = (yyvsp[0].node);
 	}
-#line 2326 "src/bison/bison.tab.c"
+#line 2327 "src/bison/bison.tab.c"
     break;
 
   case 6: /* decl: fun_decl  */
-#line 102 "src/bison/bison.y"
+#line 103 "src/bison/bison.y"
                    {
-		(yyval.node) = createNode("fun_decl", 1);
+		(yyval.node) =  (yyvsp[0].node);
 	}
-#line 2334 "src/bison/bison.tab.c"
+#line 2335 "src/bison/bison.tab.c"
     break;
 
   case 7: /* var_decl: TYPE ID ';'  */
-#line 108 "src/bison/bison.y"
+#line 109 "src/bison/bison.y"
                     {
+		(yyval.node) = createNode("var_decl");
+		
+		Node * aux1 = createNode("\0");
+		aux1->token = allocateToken((yyvsp[-2].token).lexeme, (yyvsp[-2].token).line, (yyvsp[-2].token).column);
+		(yyval.node)->leaf1 = aux1;
+
+		Node *aux2 = createNode("\0");
+		aux2->token = allocateToken((yyvsp[-1].token).lexeme, (yyvsp[-1].token).line, (yyvsp[-1].token).column);
+		(yyval.node)->leaf2 = aux2;
+
 		insertSymbol(symbolTable, (yyvsp[-1].token).lexeme, (yyvsp[-1].token).line, (yyvsp[-1].token).column, (yyvsp[-2].token).lexeme, "var", (yyvsp[-1].token).scope);
 	}
-#line 2342 "src/bison/bison.tab.c"
+#line 2353 "src/bison/bison.tab.c"
     break;
 
   case 8: /* fun_decl: TYPE ID '(' params ')' block_stmt  */
-#line 114 "src/bison/bison.y"
+#line 125 "src/bison/bison.y"
                                           {
+		(yyval.node) = createNode("fun_decl");
+		
+		Node * aux1 = createNode("\0");
+		aux1->token = allocateToken((yyvsp[-5].token).lexeme, (yyvsp[-5].token).line, (yyvsp[-5].token).column);
+		(yyval.node)->leaf1 = aux1;
+
+		Node *aux2 = createNode("\0");
+		aux2->token = allocateToken((yyvsp[-4].token).lexeme, (yyvsp[-4].token).line, (yyvsp[-4].token).column);
+		(yyval.node)->leaf2 = aux2;
+		
+		(yyval.node)->leaf3 = (yyvsp[-2].node);
+		(yyval.node)->leaf4 = (yyvsp[0].node);
+
 		insertSymbol(symbolTable, (yyvsp[-4].token).lexeme, (yyvsp[-4].token).line, (yyvsp[-4].token).column, (yyvsp[-5].token).lexeme, "fun",(yyvsp[-4].token).scope);
 	}
-#line 2350 "src/bison/bison.tab.c"
+#line 2374 "src/bison/bison.tab.c"
     break;
 
   case 9: /* fun_decl: TYPE ID '(' ')' block_stmt  */
-#line 117 "src/bison/bison.y"
+#line 141 "src/bison/bison.y"
                                      {
+		(yyval.node) = createNode("fun_decl");
+		
+		Node * aux1 = createNode("\0");
+		aux1->token = allocateToken((yyvsp[-4].token).lexeme, (yyvsp[-4].token).line, (yyvsp[-4].token).column);
+		(yyval.node)->leaf1 = aux1;
+
+		Node *aux2 = createNode("\0");
+		aux2->token = allocateToken((yyvsp[-3].token).lexeme, (yyvsp[-3].token).line, (yyvsp[-3].token).column);
+		(yyval.node)->leaf2 = aux2;
+		
+		(yyval.node)->leaf3 = (yyvsp[0].node);
+
 		insertSymbol(symbolTable, (yyvsp[-3].token).lexeme, (yyvsp[-3].token).line, (yyvsp[-3].token).column, (yyvsp[-4].token).lexeme, "fun", (yyvsp[-3].token).scope);
 	}
-#line 2358 "src/bison/bison.tab.c"
+#line 2394 "src/bison/bison.tab.c"
+    break;
+
+  case 10: /* params: params ',' param_decl  */
+#line 159 "src/bison/bison.y"
+                               {
+		(yyval.node) = (yyvsp[0].node);
+	}
+#line 2402 "src/bison/bison.tab.c"
+    break;
+
+  case 11: /* params: param_decl  */
+#line 162 "src/bison/bison.y"
+                     {
+		(yyval.node) = createNode("param_decl");
+		(yyval.node)->leaf1 = (yyvsp[0].node);
+	}
+#line 2411 "src/bison/bison.tab.c"
     break;
 
   case 12: /* param_decl: TYPE ID  */
-#line 128 "src/bison/bison.y"
+#line 169 "src/bison/bison.y"
                 {
+		char type[100];
+		strcpy(type, (yyvsp[-1].token).lexeme);
+		
+		(yyval.node) = createNode(type);
+		(yyval.node)->token = allocateToken((yyvsp[0].token).lexeme, (yyvsp[0].token).line, (yyvsp[0].token).column);
+
 		insertSymbol(symbolTable, (yyvsp[0].token).lexeme, (yyvsp[0].token).line, (yyvsp[0].token).column, (yyvsp[-1].token).lexeme, "param", (scopeId + 1));
 	}
-#line 2366 "src/bison/bison.tab.c"
+#line 2425 "src/bison/bison.tab.c"
+    break;
+
+  case 13: /* statement: exp_stmt  */
+#line 181 "src/bison/bison.y"
+                 {
+		(yyval.node) = (yyvsp[0].node);
+	}
+#line 2433 "src/bison/bison.tab.c"
+    break;
+
+  case 14: /* statement: block_stmt  */
+#line 184 "src/bison/bison.y"
+                     {
+		(yyval.node) = (yyvsp[0].node);
+	}
+#line 2441 "src/bison/bison.tab.c"
+    break;
+
+  case 15: /* statement: if_stmt  */
+#line 187 "src/bison/bison.y"
+                  {
+		(yyval.node) = (yyvsp[0].node);
+	}
+#line 2449 "src/bison/bison.tab.c"
+    break;
+
+  case 16: /* statement: return_stmt  */
+#line 190 "src/bison/bison.y"
+                      {
+		(yyval.node) = (yyvsp[0].node);
+	}
+#line 2457 "src/bison/bison.tab.c"
+    break;
+
+  case 17: /* statement: write_stmt  */
+#line 193 "src/bison/bison.y"
+                     {
+		(yyval.node) = (yyvsp[0].node);
+	}
+#line 2465 "src/bison/bison.tab.c"
+    break;
+
+  case 18: /* statement: writeln_stmt  */
+#line 196 "src/bison/bison.y"
+                       {
+		(yyval.node) = (yyvsp[0].node);
+	}
+#line 2473 "src/bison/bison.tab.c"
+    break;
+
+  case 19: /* statement: read_stmt  */
+#line 199 "src/bison/bison.y"
+                    {
+		(yyval.node) = (yyvsp[0].node);
+	}
+#line 2481 "src/bison/bison.tab.c"
+    break;
+
+  case 20: /* statement: var_decl  */
+#line 202 "src/bison/bison.y"
+                   {
+		(yyval.node) = createNode("var_decl");
+		(yyval.node)->leaf1 = (yyvsp[0].node);
+	}
+#line 2490 "src/bison/bison.tab.c"
+    break;
+
+  case 21: /* statement: for_stmt  */
+#line 206 "src/bison/bison.y"
+                   {
+		(yyval.node) = (yyvsp[0].node);
+	}
+#line 2498 "src/bison/bison.tab.c"
+    break;
+
+  case 22: /* for_stmt: FOR '(' assing_exp ';' rel_exp ';' assing_exp ')' block_stmt  */
+#line 212 "src/bison/bison.y"
+                                                                     {
+		(yyval.node) = createNode("for_stmt");
+
+		Node *aux = createNode("\0");
+		aux->token = allocateToken((yyvsp[-8].token).lexeme, (yyvsp[-8].token).line, (yyvsp[-8].token).column);
+		
+		(yyval.node)->leaf1 = aux;
+		(yyval.node)->leaf2 = (yyvsp[-6].node);
+		(yyval.node)->leaf3 = (yyvsp[-4].node);
+		(yyval.node)->leaf4 = (yyvsp[-2].node);
+		(yyval.node)->leaf5 = (yyvsp[0].node);
+	}
+#line 2515 "src/bison/bison.tab.c"
+    break;
+
+  case 23: /* exp_stmt: exp ';'  */
+#line 227 "src/bison/bison.y"
+                {
+		(yyval.node) = (yyvsp[-1].node);
+	}
+#line 2523 "src/bison/bison.tab.c"
+    break;
+
+  case 24: /* exp_stmt: ';'  */
+#line 230 "src/bison/bison.y"
+              {
+		/* do nothing */
+	}
+#line 2531 "src/bison/bison.tab.c"
+    break;
+
+  case 25: /* exp: assing_exp  */
+#line 236 "src/bison/bison.y"
+                   {
+		(yyval.node) = (yyvsp[0].node);
+	}
+#line 2539 "src/bison/bison.tab.c"
+    break;
+
+  case 26: /* exp: simple_exp  */
+#line 239 "src/bison/bison.y"
+                     {
+		(yyval.node) = (yyvsp[0].node);
+	}
+#line 2547 "src/bison/bison.tab.c"
+    break;
+
+  case 27: /* assing_exp: ID ASSIGN exp  */
+#line 245 "src/bison/bison.y"
+                      {
+		(yyval.node) = createNode("assing_exp");
+
+		Node* aux1 = createNode("\0");
+		aux1->token = allocateToken((yyvsp[-2].token).lexeme, (yyvsp[-2].token).line, (yyvsp[-2].token).column);
+
+		Node* aux2 = createNode("\0");
+		aux2->token = allocateToken((yyvsp[-1].token).lexeme, (yyvsp[-1].token).line, (yyvsp[-1].token).column);
+
+		(yyval.node)->leaf1 = aux1;
+		(yyval.node)->leaf2 = aux2;
+		(yyval.node)->leaf3 = (yyvsp[0].node);
+	}
+#line 2565 "src/bison/bison.tab.c"
+    break;
+
+  case 28: /* block_stmt: '{' stmt_list '}'  */
+#line 261 "src/bison/bison.y"
+                          {
+		(yyval.node) = (yyvsp[-1].node);
+	}
+#line 2573 "src/bison/bison.tab.c"
+    break;
+
+  case 29: /* stmt_list: stmt_list statement  */
+#line 268 "src/bison/bison.y"
+                            {
+		(yyval.node) = createNode("stmt_list");
+		(yyval.node)->leaf1 = (yyvsp[-1].node);
+		(yyval.node)->leaf2 = (yyvsp[0].node);
+	}
+#line 2583 "src/bison/bison.tab.c"
+    break;
+
+  case 31: /* if_stmt: IF '(' bin_exp ')' statement  */
+#line 277 "src/bison/bison.y"
+                                                {
+		(yyval.node) = createNode("if_stmt");
+
+		Node *aux1 = createNode("\0");
+		aux1->token = allocateToken((yyvsp[-4].token).lexeme, (yyvsp[-4].token).line, (yyvsp[-4].token).column);
+
+		(yyval.node)->leaf1 = aux1;
+		(yyval.node)->leaf2 = (yyvsp[-2].node);
+		(yyval.node)->leaf3 = (yyvsp[0].node);
+	}
+#line 2598 "src/bison/bison.tab.c"
+    break;
+
+  case 32: /* if_stmt: IF '(' bin_exp ')' statement ELSE statement  */
+#line 287 "src/bison/bison.y"
+                                                      {
+		(yyval.node) = createNode("if_stmt");
+
+		Node *aux1 = createNode("\0");
+		aux1->token = allocateToken((yyvsp[-6].token).lexeme, (yyvsp[-6].token).line, (yyvsp[-6].token).column);
+
+		(yyval.node)->leaf1 = aux1;
+		(yyval.node)->leaf2 = (yyvsp[-4].node);
+		(yyval.node)->leaf3 = (yyvsp[-2].node);
+		(yyval.node)->leaf4 = (yyvsp[0].node);
+		(yyval.node)->leaf4->token = allocateToken((yyvsp[-1].token).lexeme, (yyvsp[-1].token).line, (yyvsp[-1].token).column);
+	}
+#line 2615 "src/bison/bison.tab.c"
+    break;
+
+  case 33: /* return_stmt: RETURN ';'  */
+#line 302 "src/bison/bison.y"
+                   {
+		(yyval.node) = createNode("return_stmt");
+
+		Node *aux = createNode("\0");
+		aux->token = allocateToken((yyvsp[-1].token).lexeme, (yyvsp[-1].token).line, (yyvsp[-1].token).column);
+
+		(yyval.node)->leaf1 = aux;
+	}
+#line 2628 "src/bison/bison.tab.c"
+    break;
+
+  case 34: /* return_stmt: RETURN exp ';'  */
+#line 310 "src/bison/bison.y"
+                         {
+		(yyval.node) = createNode("return_stmt");
+
+		Node *aux = createNode("\0");
+		aux->token = allocateToken((yyvsp[-2].token).lexeme, (yyvsp[-2].token).line, (yyvsp[-2].token).column);
+
+		(yyval.node)->leaf1 = aux;
+		(yyval.node)->leaf2 = (yyvsp[-1].node);
+	}
+#line 2642 "src/bison/bison.tab.c"
+    break;
+
+  case 35: /* write_stmt: WRITE '(' simple_exp ')' ';'  */
+#line 322 "src/bison/bison.y"
+                                     {
+		(yyval.node) = createNode("write_stmt");
+
+		Node *aux = createNode("\0");
+		aux->token = allocateToken((yyvsp[-4].token).lexeme, (yyvsp[-4].token).line, (yyvsp[-4].token).column);
+
+		(yyval.node)->leaf1 = aux;
+		(yyval.node)->leaf2 = (yyvsp[-2].node);
+	}
+#line 2656 "src/bison/bison.tab.c"
+    break;
+
+  case 36: /* writeln_stmt: WRITELN '(' simple_exp ')' ';'  */
+#line 334 "src/bison/bison.y"
+                                       {
+		(yyval.node) = createNode("writeln_stmt");
+
+		Node *aux = createNode("\0");
+		aux->token = allocateToken((yyvsp[-4].token).lexeme, (yyvsp[-4].token).line, (yyvsp[-4].token).column);
+
+		(yyval.node)->leaf1 = aux;
+		(yyval.node)->leaf2 = (yyvsp[-2].node);
+	}
+#line 2670 "src/bison/bison.tab.c"
+    break;
+
+  case 37: /* read_stmt: READ '(' ID ')' ';'  */
+#line 346 "src/bison/bison.y"
+                            {
+		(yyval.node) = createNode("read_stmt");
+
+		Node *aux = createNode("\0");
+		aux->token = allocateToken((yyvsp[-4].token).lexeme, (yyvsp[-4].token).line, (yyvsp[-4].token).column);
+
+		(yyval.node)->leaf1 = aux;
+
+		char id[100];
+		strcpy(id, "\0");
+		
+		Node* aux2 = createNode(id);
+		aux2->token = allocateToken((yyvsp[-2].token).lexeme, (yyvsp[-2].token).line, (yyvsp[-2].token).column);
+
+
+		(yyval.node)->leaf2 = aux2;
+	}
+#line 2692 "src/bison/bison.tab.c"
+    break;
+
+  case 38: /* simple_exp: bin_exp  */
+#line 366 "src/bison/bison.y"
+                {
+		(yyval.node) = (yyvsp[0].node);
+	}
+#line 2700 "src/bison/bison.tab.c"
+    break;
+
+  case 39: /* simple_exp: list_exp  */
+#line 369 "src/bison/bison.y"
+                   {
+		(yyval.node) = (yyvsp[0].node);
+	}
+#line 2708 "src/bison/bison.tab.c"
+    break;
+
+  case 40: /* list_exp: factor ':' factor  */
+#line 375 "src/bison/bison.y"
+                          {
+		(yyval.node) = createNode("list_exp");
+		(yyval.node)->leaf1 = (yyvsp[-2].node);
+		(yyval.node)->token = allocateToken((yyvsp[-1].token).lexeme, (yyvsp[-1].token).line, (yyvsp[-1].token).column);
+		(yyval.node)->leaf2 = (yyvsp[0].node);
+	}
+#line 2719 "src/bison/bison.tab.c"
+    break;
+
+  case 41: /* list_exp: '?' factor  */
+#line 381 "src/bison/bison.y"
+                     {
+		(yyval.node) = createNode("list_exp"); 
+		(yyval.node)->token = allocateToken((yyvsp[-1].token).lexeme, (yyvsp[-1].token).line, (yyvsp[-1].token).column);
+		(yyval.node)->leaf1 = (yyvsp[0].node);
+	}
+#line 2729 "src/bison/bison.tab.c"
+    break;
+
+  case 42: /* list_exp: '%' factor  */
+#line 386 "src/bison/bison.y"
+                     {
+		(yyval.node) = createNode("list_exp"); 
+		(yyval.node)->token = allocateToken((yyvsp[-1].token).lexeme, (yyvsp[-1].token).line, (yyvsp[-1].token).column);
+		(yyval.node)->leaf1 = (yyvsp[0].node);
+	}
+#line 2739 "src/bison/bison.tab.c"
+    break;
+
+  case 43: /* list_exp: factor MAP factor  */
+#line 391 "src/bison/bison.y"
+                            {
+		(yyval.node) = createNode("list_exp");
+		(yyval.node)->leaf1 = (yyvsp[-2].node);
+		(yyval.node)->token = allocateToken((yyvsp[-1].token).lexeme, (yyvsp[-1].token).line, (yyvsp[-1].token).column);
+		(yyval.node)->leaf2 = (yyvsp[0].node);
+	}
+#line 2750 "src/bison/bison.tab.c"
+    break;
+
+  case 44: /* list_exp: factor FILTER factor  */
+#line 397 "src/bison/bison.y"
+                               {
+		(yyval.node) = createNode("list_exp");
+		(yyval.node)->leaf1 = (yyvsp[-2].node);
+		(yyval.node)->token = allocateToken((yyvsp[-1].token).lexeme, (yyvsp[-1].token).line, (yyvsp[-1].token).column);
+		(yyval.node)->leaf2 = (yyvsp[0].node);
+	}
+#line 2761 "src/bison/bison.tab.c"
+    break;
+
+  case 46: /* bin_exp: unary_log_exp  */
+#line 407 "src/bison/bison.y"
+                        {
+		(yyval.node) = (yyvsp[0].node);
+	}
+#line 2769 "src/bison/bison.tab.c"
+    break;
+
+  case 49: /* unary_log_exp: rel_exp  */
+#line 415 "src/bison/bison.y"
+                  {
+		(yyval.node) = (yyvsp[0].node);
+	}
+#line 2777 "src/bison/bison.tab.c"
+    break;
+
+  case 50: /* rel_exp: rel_exp REL_OP sum_exp  */
+#line 421 "src/bison/bison.y"
+                               {
+		(yyval.node) = createNode("rel_exp");
+		(yyval.node)->leaf1 = (yyvsp[-2].node);
+		(yyval.node)->token = allocateToken((yyvsp[-1].token).lexeme, (yyvsp[-1].token).line, (yyvsp[-1].token).column);
+		(yyval.node)->leaf2 = (yyvsp[0].node);
+	}
+#line 2788 "src/bison/bison.tab.c"
+    break;
+
+  case 51: /* rel_exp: sum_exp  */
+#line 427 "src/bison/bison.y"
+                  {
+		(yyval.node) = (yyvsp[0].node);
+	}
+#line 2796 "src/bison/bison.tab.c"
+    break;
+
+  case 52: /* sum_exp: sum_exp SUM_OP mul_exp  */
+#line 433 "src/bison/bison.y"
+                               {
+		(yyval.node) = createNode("sum_exp");
+		(yyval.node)->leaf1 = (yyvsp[-2].node);
+		(yyval.node)->token = allocateToken((yyvsp[-1].token).lexeme, (yyvsp[-1].token).line, (yyvsp[-1].token).column);
+		(yyval.node)->leaf2 = (yyvsp[0].node);
+	}
+#line 2807 "src/bison/bison.tab.c"
+    break;
+
+  case 53: /* sum_exp: mul_exp  */
+#line 439 "src/bison/bison.y"
+                  {
+		(yyval.node) = (yyvsp[0].node);
+	}
+#line 2815 "src/bison/bison.tab.c"
+    break;
+
+  case 54: /* mul_exp: mul_exp MUL_OP factor  */
+#line 445 "src/bison/bison.y"
+                              {
+		(yyval.node) = createNode("mul_exp");
+
+		(yyval.node)->leaf1 = (yyvsp[-2].node);
+		(yyval.node)->token = allocateToken((yyvsp[-1].token).lexeme, (yyvsp[-1].token).line, (yyvsp[-1].token).column);
+		(yyval.node)->leaf2 = (yyvsp[0].node);
+	}
+#line 2827 "src/bison/bison.tab.c"
+    break;
+
+  case 55: /* mul_exp: factor  */
+#line 452 "src/bison/bison.y"
+                 {
+		(yyval.node) = (yyvsp[0].node);
+	}
+#line 2835 "src/bison/bison.tab.c"
+    break;
+
+  case 56: /* mul_exp: SUM_OP factor  */
+#line 455 "src/bison/bison.y"
+                        {
+		(yyval.node) = createNode("\0");
+		(yyval.node)->token = allocateToken((yyvsp[-1].token).lexeme, (yyvsp[-1].token).line, (yyvsp[-1].token).column);
+		(yyval.node)->leaf1 = (yyvsp[0].node);
+	}
+#line 2845 "src/bison/bison.tab.c"
+    break;
+
+  case 57: /* factor: immutable  */
+#line 463 "src/bison/bison.y"
+                  {
+		(yyval.node) = (yyvsp[0].node);
+	}
+#line 2853 "src/bison/bison.tab.c"
+    break;
+
+  case 58: /* factor: ID  */
+#line 466 "src/bison/bison.y"
+             {
+		(yyval.node) = createNode("\0");
+		(yyval.node)->token = allocateToken((yyvsp[0].token).lexeme, (yyvsp[0].token).line, (yyvsp[0].token).column);
+	}
+#line 2862 "src/bison/bison.tab.c"
+    break;
+
+  case 59: /* immutable: '(' simple_exp ')'  */
+#line 473 "src/bison/bison.y"
+                           {
+		(yyval.node) = (yyvsp[-1].node);
+	}
+#line 2870 "src/bison/bison.tab.c"
+    break;
+
+  case 60: /* immutable: call  */
+#line 476 "src/bison/bison.y"
+               {
+		(yyval.node) =  (yyvsp[0].node);
+	}
+#line 2878 "src/bison/bison.tab.c"
+    break;
+
+  case 61: /* immutable: constant  */
+#line 479 "src/bison/bison.y"
+                   {
+		(yyval.node) = (yyvsp[0].node);
+	}
+#line 2886 "src/bison/bison.tab.c"
+    break;
+
+  case 62: /* call: ID '(' args ')'  */
+#line 485 "src/bison/bison.y"
+                        {
+		(yyval.node) = createNode("call");
+		(yyval.node)->token = allocateToken((yyvsp[-3].token).lexeme, (yyvsp[-3].token).line, (yyvsp[-3].token).column);
+		(yyval.node)->leaf1 = (yyvsp[-1].node);
+	}
+#line 2896 "src/bison/bison.tab.c"
+    break;
+
+  case 63: /* call: ID '(' ')'  */
+#line 490 "src/bison/bison.y"
+                     {
+		(yyval.node) = createNode("\0");
+		(yyval.node)->token = allocateToken((yyvsp[-2].token).lexeme, (yyvsp[-2].token).line, (yyvsp[-2].token).column);
+	}
+#line 2905 "src/bison/bison.tab.c"
+    break;
+
+  case 66: /* constant: NIL  */
+#line 502 "src/bison/bison.y"
+            {
+		(yyval.node) = createNode("\0");
+		(yyval.node)->token = allocateToken((yyvsp[0].token).lexeme, (yyvsp[0].token).line, (yyvsp[0].token).column);
+	}
+#line 2914 "src/bison/bison.tab.c"
+    break;
+
+  case 67: /* constant: INT  */
+#line 506 "src/bison/bison.y"
+              {
+		(yyval.node) = createNode("\0");
+		(yyval.node)->token = allocateToken((yyvsp[0].token).lexeme, (yyvsp[0].token).line, (yyvsp[0].token).column);
+	}
+#line 2923 "src/bison/bison.tab.c"
+    break;
+
+  case 68: /* constant: FLOAT  */
+#line 510 "src/bison/bison.y"
+                {
+		(yyval.node) = createNode("\0");
+		(yyval.node)->token = allocateToken((yyvsp[0].token).lexeme, (yyvsp[0].token).line, (yyvsp[0].token).column);
+	}
+#line 2932 "src/bison/bison.tab.c"
+    break;
+
+  case 69: /* constant: STRING  */
+#line 514 "src/bison/bison.y"
+                 {		
+		(yyval.node) = createNode("\0");
+		(yyval.node)->token = allocateToken((yyvsp[0].token).lexeme, (yyvsp[0].token).line, (yyvsp[0].token).column);
+	}
+#line 2941 "src/bison/bison.tab.c"
     break;
 
 
-#line 2370 "src/bison/bison.tab.c"
+#line 2945 "src/bison/bison.tab.c"
 
       default: break;
     }
@@ -2591,7 +3166,7 @@ yyreturn:
   return yyresult;
 }
 
-#line 263 "src/bison/bison.y"
+#line 520 "src/bison/bison.y"
 
 
 extern void yyerror(const char* s)
@@ -2601,10 +3176,10 @@ extern void yyerror(const char* s)
 
 int main(int argc, char **argv){
 	initializeTable(symbolTable);
-	initializeList();
 	initializeScopeStack(scopeStack);
     yyparse();
-	printTree();
+	printf("\n\n--------------------------------------------------------------- TREE ---------------------------------------------------------------- \n\n");
+	// printTree(tree, 1);
 	printSymbolTable(symbolTable);
     yylex_destroy();
     return 0;

@@ -1,6 +1,7 @@
 #include "symbol.table.h"
-#include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 extern void initializeTable(Symbol *table){
     for(int i = 0; i < 1000; i++){
@@ -15,6 +16,15 @@ extern int findNextPosition(Symbol *table){
         }
     }
     return -1;
+}
+
+extern Symbol* allocateToken(char* lexeme, int line, int column){
+    Symbol *newToken = (Symbol* )malloc(sizeof(Symbol));
+    strcpy(newToken->lexeme, lexeme);
+    newToken->line = line;
+    newToken->column = column;
+    
+    return newToken;
 }
 
 extern void insertSymbol(Symbol* table, char* lexeme,  int line, int column, char* type, char* isFunction, int scope){
@@ -34,7 +44,7 @@ extern void insertSymbol(Symbol* table, char* lexeme,  int line, int column, cha
 }
 
 extern void printSymbolTable(Symbol *table){
-    printf("\n\n--------------------------------------------------------------- SYMBOL TABLE ---------------------------------------------------------------- \n\n");
+    printf("\n\n------------------------------------------------------------ SYMBOL TABLE ------------------------------------------------------------- \n\n");
 printf("%-8s \t %-8s \t %-8s \t %-8s \t %-8s \t %-8s\n","ID", "LINE", "COLUMN", "TYPE", "DECL", "SCOPE");
     for(int i = 0; i< 1000; i++){
         if(table[i].filled == 1){

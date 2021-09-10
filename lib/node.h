@@ -1,24 +1,21 @@
 #ifndef NODE_H
 #define NODE_H
 
+#include "symbol.table.h"
+
 typedef struct node
 {
 	struct node* leaf1;
 	struct node* leaf2;
     struct node* leaf3;
+    struct node* leaf4;
+    struct node* leaf5;
+    struct symbol *token;
     char name[50];
-    int depth;
 }
 Node;
 
-typedef struct listNode{
-    Node* val;
-    struct listNode* next;
-} ListNode;
-
-extern Node* createNode(char* name, int depth);
-extern void initializeList();
-extern void addToList(Node *node);
-extern void printTree();
+extern Node* createNode(char* name);
+extern void printTree(Node* node, int depth);
 
 #endif
