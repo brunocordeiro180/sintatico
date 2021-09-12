@@ -123,13 +123,11 @@ fun_decl:
 	TYPE ID '(' params ')' block_stmt {
 		$$ = createNode("fun_decl");
 		
-		Node * aux1 = createNode("\0");
-		aux1->token = allocateToken($1.lexeme, $1.line, $1.column);
-		$$->leaf1 = aux1;
+		$$->leaf1 = createNode("\0");
+		$$->leaf1->token = allocateToken($1.lexeme, $1.line, $1.column);
 
-		Node *aux2 = createNode("\0");
-		aux2->token = allocateToken($2.lexeme, $2.line, $2.column);
-		$$->leaf2 = aux2;
+		$$->leaf2 = createNode("\0");
+		$$->leaf2->token = allocateToken($2.lexeme, $2.line, $2.column);
 		
 		$$->leaf3 = $4;
 		$$->leaf4 = $6;
@@ -139,13 +137,11 @@ fun_decl:
 	| TYPE ID '(' ')' block_stmt {
 		$$ = createNode("fun_decl");
 		
-		Node * aux1 = createNode("\0");
-		aux1->token = allocateToken($1.lexeme, $1.line, $1.column);
-		$$->leaf1 = aux1;
+		$$->leaf1 = createNode("\0");
+		$$->leaf1->token = allocateToken($1.lexeme, $1.line, $1.column);
 
-		Node *aux2 = createNode("\0");
-		aux2->token = allocateToken($2.lexeme, $2.line, $2.column);
-		$$->leaf2 = aux2;
+		$$->leaf2 = createNode("\0");
+		$$->leaf2->token = allocateToken($2.lexeme, $2.line, $2.column);
 		
 		$$->leaf3 = $5;
 
@@ -212,10 +208,8 @@ for_stmt:
 	FOR '(' assing_exp ';' rel_exp ';' assing_exp ')' block_stmt {
 		$$ = createNode("for_stmt");
 
-		Node *aux = createNode("\0");
-		aux->token = allocateToken($1.lexeme, $1.line, $1.column);
-		
-		$$->leaf1 = aux;
+		$$->leaf1 = createNode("\0");
+		$$->leaf1->token = allocateToken($1.lexeme, $1.line, $1.column);
 		$$->leaf2 = $3;
 		$$->leaf3 = $5;
 		$$->leaf4 = $7;
@@ -245,14 +239,12 @@ assing_exp:
 	ID ASSIGN simple_exp {
 		$$ = createNode("assing_exp");
 
-		Node* aux1 = createNode("\0");
-		aux1->token = allocateToken($1.lexeme, $1.line, $1.column);
+		$$->leaf1 = createNode("\0");
+		$$->leaf1->token = allocateToken($1.lexeme, $1.line, $1.column);
 
-		Node* aux2 = createNode("\0");
-		aux2->token = allocateToken($2.lexeme, $2.line, $2.column);
+		$$->leaf2 = createNode("\0");
+		$$->leaf2->token = allocateToken($2.lexeme, $2.line, $2.column);
 
-		$$->leaf1 = aux1;
-		$$->leaf2 = aux2;
 		$$->leaf3 = $3;
 	}
 ;
@@ -279,43 +271,36 @@ if_stmt:
 	IF '(' rel_exp ')' statement %prec THEN {
 		$$ = createNode("if_stmt");
 
-		Node *aux1 = createNode("\0");
-		aux1->token = allocateToken($1.lexeme, $1.line, $1.column);
-
-		$$->leaf1 = aux1;
+		$$->leaf1 = createNode("\0");;
+		$$->leaf1->token = allocateToken($1.lexeme, $1.line, $1.column);
 		$$->leaf2 = $3;
 		$$->leaf3 = $5;
 	}
 	| IF '(' rel_exp ')' statement ELSE statement {
 		$$ = createNode("if_else_stmt");
 
-		Node *aux1 = createNode("\0");
-		aux1->token = allocateToken($1.lexeme, $1.line, $1.column);
-
-		$$->leaf1 = aux1;
+		$$->leaf1 = createNode("\0");;
+		$$->leaf1->token = allocateToken($1.lexeme, $1.line, $1.column);
+		
 		$$->leaf2 = $3;
 		$$->leaf3 = $5;
-		$$->leaf4 = $7;
+
+		$$->leaf4 = createNode("\0");
 		$$->leaf4->token = allocateToken($6.lexeme, $6.line, $6.column);
+		$$->leaf5 = $7;
 	}
 ;
 
 return_stmt:
 	RETURN ';' {
 		$$ = createNode("return_stmt");
-
-		Node *aux = createNode("\0");
-		aux->token = allocateToken($1.lexeme, $1.line, $1.column);
-
-		$$->leaf1 = aux;
+		$$->leaf1 = createNode("\0");
+		$$->leaf1->token = allocateToken($1.lexeme, $1.line, $1.column);
 	}
 	| RETURN exp ';' {
 		$$ = createNode("return_stmt");
-
-		Node *aux = createNode("\0");
-		aux->token = allocateToken($1.lexeme, $1.line, $1.column);
-
-		$$->leaf1 = aux;
+		$$->leaf1 = createNode("\0");;
+		$$->leaf1->token = allocateToken($1.lexeme, $1.line, $1.column);
 		$$->leaf2 = $2;
 	}
 ;
@@ -324,10 +309,8 @@ write_stmt:
 	WRITE '(' simple_exp ')' ';' {
 		$$ = createNode("write_stmt");
 
-		Node *aux = createNode("\0");
-		aux->token = allocateToken($1.lexeme, $1.line, $1.column);
-
-		$$->leaf1 = aux;
+		$$->leaf1 = createNode("\0");
+		$$->leaf1->token = allocateToken($1.lexeme, $1.line, $1.column);
 		$$->leaf2 = $3;
 	}
 ;
@@ -335,11 +318,8 @@ write_stmt:
 writeln_stmt:
 	WRITELN '(' simple_exp ')' ';' {
 		$$ = createNode("writeln_stmt");
-
-		Node *aux = createNode("\0");
-		aux->token = allocateToken($1.lexeme, $1.line, $1.column);
-
-		$$->leaf1 = aux;
+		$$->leaf1 = createNode("\0");;
+		$$->leaf1->token = allocateToken($1.lexeme, $1.line, $1.column);
 		$$->leaf2 = $3;
 	}
 ;
@@ -348,19 +328,11 @@ read_stmt:
 	READ '(' ID ')' ';' {
 		$$ = createNode("read_stmt");
 
-		Node *aux = createNode("\0");
-		aux->token = allocateToken($1.lexeme, $1.line, $1.column);
+		$$->leaf1 = createNode("\0");
+		$$->leaf1->token = allocateToken($1.lexeme, $1.line, $1.column);
 
-		$$->leaf1 = aux;
-
-		char id[100];
-		strcpy(id, "\0");
-		
-		Node* aux2 = createNode(id);
-		aux2->token = allocateToken($3.lexeme, $3.line, $3.column);
-
-
-		$$->leaf2 = aux2;
+		$$->leaf2  = createNode("\0");
+		$$->leaf2->token = allocateToken($3.lexeme, $3.line, $3.column);
 	}
 ;
 
@@ -428,10 +400,9 @@ bin_exp:
 unary_log_exp:
 	EXCLAMATION unary_log_exp {
 		$$ = createNode("unary_log_exp");
-		Node *aux = createNode("\0");
-		aux->token = allocateToken($1.lexeme, $1.line, $1.column);
-
-		$$->leaf1 = aux;
+	
+		$$->leaf1 = createNode("\0");
+		$$->leaf1->token = allocateToken($1.lexeme, $1.line, $1.column);
 		$$->leaf2 = $2;
 	}
 	| rel_exp {
