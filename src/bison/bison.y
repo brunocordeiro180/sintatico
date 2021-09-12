@@ -9,13 +9,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-Symbol symbolTable[1000];
-
 extern int yylex();
 extern int yylex_destroy();
 extern void yyerror(const char* s);
 extern int scopeStack[100];
 extern int scopeId;
+SymbolList *symbolTable;
 extern Node *tree;
 %}
 
@@ -115,7 +114,7 @@ var_decl:
 		$$->leaf2 = createNode("\0");
 		$$->leaf2->token = allocateToken($2.lexeme, $2.line, $2.column);
 
-		insertSymbol(symbolTable, $2.lexeme, $2.line, $2.column, $1.lexeme, "var", $2.scope);
+		insertSymbol($2.lexeme, $2.line, $2.column, $1.lexeme, "var", $2.scope);
 	}
 ;
 
@@ -132,7 +131,7 @@ fun_decl:
 		$$->leaf3 = $4;
 		$$->leaf4 = $6;
 
-		insertSymbol(symbolTable, $2.lexeme, $2.line, $2.column, $1.lexeme, "fun",$2.scope);
+		insertSymbol($2.lexeme, $2.line, $2.column, $1.lexeme, "fun",$2.scope);
 	}
 	| TYPE ID '(' ')' block_stmt {
 		$$ = createNode("fun_decl");
@@ -145,7 +144,7 @@ fun_decl:
 		
 		$$->leaf3 = $5;
 
-		insertSymbol(symbolTable, $2.lexeme, $2.line, $2.column, $1.lexeme, "fun", $2.scope);
+		insertSymbol($2.lexeme, $2.line, $2.column, $1.lexeme, "fun", $2.scope);
 	}
 ;
 
@@ -170,7 +169,7 @@ param_decl:
 		$$->leaf2 = createNode("\0");
 		$$->leaf2->token = allocateToken($2.lexeme, $2.line, $2.column);
 
-		insertSymbol(symbolTable, $2.lexeme, $2.line, $2.column, $1.lexeme, "param", (scopeId + 1));
+		insertSymbol($2.lexeme, $2.line, $2.column, $1.lexeme, "param", (scopeId + 1));
 	}
 ;
 
@@ -537,6 +536,7 @@ int main(int argc, char **argv){
 	printTree(tree, 1);
 	printSymbolTable(symbolTable);
 	freeTree(tree);
+	freeTable();
     yylex_destroy();
     return 0;
 }

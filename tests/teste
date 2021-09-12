@@ -1,9 +1,7 @@
 int i;
 int list f;
+float a;
 
-int cavalo(int a, int b, int c){
-    if(a <= 10){
-        write("OI");
-    }
-    return 0;
+int main(int n){
+    int x;
 }

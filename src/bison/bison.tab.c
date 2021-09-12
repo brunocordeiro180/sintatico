@@ -77,13 +77,13 @@
 #include <stdlib.h>
 #include <string.h>
 
-Symbol symbolTable[1000];
 
 extern int yylex();
 extern int yylex_destroy();
 extern void yyerror(const char* s);
 extern int scopeStack[100];
 extern int scopeId;
+SymbolList *symbolTable;
 extern Node *tree;
 
 #line 90 "src/bison/bison.tab.c"
@@ -2355,7 +2355,7 @@ yyreduce:
 		(yyval.node)->leaf2 = createNode("\0");
 		(yyval.node)->leaf2->token = allocateToken((yyvsp[-1].token).lexeme, (yyvsp[-1].token).line, (yyvsp[-1].token).column);
 
-		insertSymbol(symbolTable, (yyvsp[-1].token).lexeme, (yyvsp[-1].token).line, (yyvsp[-1].token).column, (yyvsp[-2].token).lexeme, "var", (yyvsp[-1].token).scope);
+		insertSymbol((yyvsp[-1].token).lexeme, (yyvsp[-1].token).line, (yyvsp[-1].token).column, (yyvsp[-2].token).lexeme, "var", (yyvsp[-1].token).scope);
 	}
 #line 2361 "src/bison/bison.tab.c"
     break;
@@ -2374,7 +2374,7 @@ yyreduce:
 		(yyval.node)->leaf3 = (yyvsp[-2].node);
 		(yyval.node)->leaf4 = (yyvsp[0].node);
 
-		insertSymbol(symbolTable, (yyvsp[-4].token).lexeme, (yyvsp[-4].token).line, (yyvsp[-4].token).column, (yyvsp[-5].token).lexeme, "fun",(yyvsp[-4].token).scope);
+		insertSymbol((yyvsp[-4].token).lexeme, (yyvsp[-4].token).line, (yyvsp[-4].token).column, (yyvsp[-5].token).lexeme, "fun",(yyvsp[-4].token).scope);
 	}
 #line 2380 "src/bison/bison.tab.c"
     break;
@@ -2392,7 +2392,7 @@ yyreduce:
 		
 		(yyval.node)->leaf3 = (yyvsp[0].node);
 
-		insertSymbol(symbolTable, (yyvsp[-3].token).lexeme, (yyvsp[-3].token).line, (yyvsp[-3].token).column, (yyvsp[-4].token).lexeme, "fun", (yyvsp[-3].token).scope);
+		insertSymbol((yyvsp[-3].token).lexeme, (yyvsp[-3].token).line, (yyvsp[-3].token).column, (yyvsp[-4].token).lexeme, "fun", (yyvsp[-3].token).scope);
 	}
 #line 2398 "src/bison/bison.tab.c"
     break;
@@ -2426,7 +2426,7 @@ yyreduce:
 		(yyval.node)->leaf2 = createNode("\0");
 		(yyval.node)->leaf2->token = allocateToken((yyvsp[0].token).lexeme, (yyvsp[0].token).line, (yyvsp[0].token).column);
 
-		insertSymbol(symbolTable, (yyvsp[0].token).lexeme, (yyvsp[0].token).line, (yyvsp[0].token).column, (yyvsp[-1].token).lexeme, "param", (scopeId + 1));
+		insertSymbol((yyvsp[0].token).lexeme, (yyvsp[0].token).line, (yyvsp[0].token).column, (yyvsp[-1].token).lexeme, "param", (scopeId + 1));
 	}
 #line 2432 "src/bison/bison.tab.c"
     break;
@@ -3228,6 +3228,7 @@ int main(int argc, char **argv){
 	printTree(tree, 1);
 	printSymbolTable(symbolTable);
 	freeTree(tree);
+	freeTable();
     yylex_destroy();
     return 0;
 }

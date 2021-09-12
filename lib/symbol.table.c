@@ -3,52 +3,84 @@
 #include <stdlib.h>
 #include <string.h>
 
-extern void initializeTable(Symbol *table){
-    for(int i = 0; i < 1000; i++){
-        table[i].filled = 0;
-    }
+SymbolList *head;
+
+extern void initializeTable()
+{
+    head = (SymbolList *)malloc(sizeof(SymbolList));
+    head->symbol = NULL;
+    head->next = NULL;
 }
 
-extern int findNextPosition(Symbol *table){
-    for(int i =0; i < 1000; i++){
-        if(table[i].filled == 0){
-            return i;
-        }
-    }
-    return -1;
-}
-
-extern Symbol* allocateToken(char* lexeme, int line, int column){
-    Symbol *newToken = (Symbol* )malloc(sizeof(Symbol));
+extern Symbol *allocateToken(char *lexeme, int line, int column)
+{
+    Symbol *newToken = (Symbol *)malloc(sizeof(Symbol));
     strcpy(newToken->lexeme, lexeme);
     newToken->line = line;
     newToken->column = column;
-    
+
     return newToken;
 }
 
-extern void insertSymbol(Symbol* table, char* lexeme,  int line, int column, char* type, char* isFunction, int scope){
-                            
-    int i = findNextPosition(table);
-   
-    strcpy(table[i].lexeme, lexeme);
-    strcpy(table[i].type, type);
-    strcpy(table[i].isFunction, isFunction);
-    table[i].line = line;
-    table[i].column = column;
-    table[i].filled = 1;
-    table[i].scope = scope;
-   
-    // printf("POSITION %d\n", i);
-    // printf("SIMBOLO INSERIDO %s FILLED %d\n", table[i].id, table[i].filled);
+extern void insertSymbol(char *lexeme, int line, int column, char *type, char *decl, int scope)
+{
+    Symbol *newSymbol = (Symbol *)malloc(sizeof(Symbol));
+    SymbolList *current = head;
+
+    strcpy(newSymbol->lexeme, lexeme);
+    strcpy(newSymbol->type, type);
+    strcpy(newSymbol->decl, decl);
+    newSymbol->line = line;
+    newSymbol->column = column;
+    newSymbol->scope = scope;
+
+    if (current->symbol == NULL)
+    { //verifica se é o primeiro elemento da lista
+        current->symbol = newSymbol;
+        current->next = NULL;
+    }
+    else
+    {
+        while (current->next != NULL)
+        {
+            current = current->next;
+        }
+
+        SymbolList *newEntry = (SymbolList *)malloc(sizeof(SymbolList));
+        current->next = newEntry;
+        current->next->symbol = newSymbol;
+        current->next->next = NULL;
+    }
 }
 
-extern void printSymbolTable(Symbol *table){
+extern void printSymbolTable()
+{
     printf("\n\n------------------------------------------------------------ SYMBOL TABLE ------------------------------------------------------------- \n\n");
-printf("%-8s \t %-8s \t %-8s \t %-8s \t %-8s \t %-8s\n","ID", "LINE", "COLUMN", "TYPE", "DECL", "SCOPE");
-    for(int i = 0; i< 1000; i++){
-        if(table[i].filled == 1){
-            printf("%-8s \t %-8d \t %-8d \t %-8s \t %-8s \t %-8d\n", table[i].lexeme, table[i].line, table[i].column, table[i].type, table[i].isFunction, table[i].scope);
-        }
+    printf("%-8s \t %-8s \t %-8s \t %-8s \t %-8s \t %-8s\n", "ID", "LINE", "COLUMN", "TYPE", "DECL", "SCOPE");
+    SymbolList *current = head;
+    while (current != NULL)
+    {
+        printf("%-8s \t %-8d \t %-8d \t %-8s \t %-8s \t %-8d\n", current->symbol->lexeme, current->symbol->line, current->symbol->column, current->symbol->type, current->symbol->decl, current->symbol->scope);
+        current = current->next;
     }
+}
+
+extern void freeTable()
+{
+
+    freeTableRecursive(head);
+}
+
+extern void freeTableRecursive(SymbolList *list)
+{
+    if (!list){
+        return;
+    }
+
+    if (list->next){
+        freeTableRecursive(list->next);
+    }
+
+    free(list->symbol);
+    free(list);
 }

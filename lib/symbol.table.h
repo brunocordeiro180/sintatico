@@ -8,14 +8,19 @@ typedef struct symbol{
     int scope;
     int line;
     int column;
-    int filled; //0 if is not filled and 1 if is filled
-    char isFunction[3];
+    char decl[5];
 } Symbol;
 
-extern void initializeTable(Symbol *table);
-extern int findNextPosition(Symbol *table);
-extern void insertSymbol(Symbol* table, char* lexeme,  int line, int column, char* type, char* isFunction, int scope);
-extern void printSymbolTable(Symbol *s);
+typedef struct symbolList{
+    Symbol *symbol;
+    struct symbolList* next;
+} SymbolList;
+
+extern void initializeTable();
+extern void insertSymbol(char* lexeme,  int line, int column, char* type, char* isFunction, int scope);
 extern Symbol* allocateToken(char* lexeme, int line, int column);
+extern void printSymbolTable();
+extern void freeTable();
+extern void freeTableRecursive(SymbolList *list);
 
 #endif

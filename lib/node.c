@@ -53,26 +53,11 @@ extern void printTree(Node *node, int depth)
         printf(BHMAG "(%d,%d)\n" RESET, node->token->line, node->token->column);
     }
 
-    if (node->leaf1)
-    {
-        printTree(node->leaf1, depth + 1);
-    }
-    if (node->leaf2)
-    {
-        printTree(node->leaf2, depth + 1);
-    }
-    if (node->leaf3)
-    {
-        printTree(node->leaf3, depth + 1);
-    }
-    if (node->leaf4)
-    {
-        printTree(node->leaf4, depth + 1);
-    }
-    if (node->leaf5)
-    {
-        printTree(node->leaf5, depth + 1);
-    }
+    printTree(node->leaf1, depth + 1);
+    printTree(node->leaf2, depth + 1);
+    printTree(node->leaf3, depth + 1);
+    printTree(node->leaf4, depth + 1);
+    printTree(node->leaf5, depth + 1);
 }
 
 extern void freeTree(Node *tree)
