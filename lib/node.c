@@ -9,57 +9,90 @@
 
 Node *tree;
 
-extern Node* createNode(char* name){
-    Node *node = (Node *) malloc(sizeof(Node));
+extern Node *createNode(char *name)
+{
+    Node *node = (Node *)malloc(sizeof(Node));
     strcpy(node->name, name);
-    
+
     node->leaf1 = NULL;
     node->leaf2 = NULL;
     node->leaf3 = NULL;
     node->leaf4 = NULL;
     node->leaf5 = NULL;
-
     node->token = NULL;
+
     return node;
 }
 
-
-extern void printTree(Node* node, int depth) {
-    if(node == NULL){
+extern void printTree(Node *node, int depth)
+{
+    if (node == NULL)
+    {
         return;
     }
 
-    if (strcmp(node->name, "\0") != 0) {
-        
-        for(int i = 0; i< depth; i++){
+    if (strcmp(node->name, "\0") != 0)
+    {
+
+        for (int i = 0; i < depth; i++)
+        {
             printf("-");
         }
 
         printf("%s\n", node->name);
     }
 
-    if(node->token){
-        for(int i = 0; i< depth; i++){
-            printf(BHMAG"-"RESET);
+    if (node->token)
+    {
+        for (int i = 0; i < depth; i++)
+        {
+            printf(BHMAG "-" RESET);
         }
 
-        printf(BHMAG"%s "RESET, node->token->lexeme);
-        printf(BHMAG"(%d,%d)\n"RESET, node->token->line, node->token->column);
+        printf(BHMAG "%s " RESET, node->token->lexeme);
+        printf(BHMAG "(%d,%d)\n" RESET, node->token->line, node->token->column);
     }
 
-    if(node->leaf1){
+    if (node->leaf1)
+    {
         printTree(node->leaf1, depth + 1);
     }
-    if(node->leaf2){
+    if (node->leaf2)
+    {
         printTree(node->leaf2, depth + 1);
     }
-    if(node->leaf3){
+    if (node->leaf3)
+    {
         printTree(node->leaf3, depth + 1);
     }
-    if(node->leaf4){
+    if (node->leaf4)
+    {
         printTree(node->leaf4, depth + 1);
     }
-     if(node->leaf5){
+    if (node->leaf5)
+    {
         printTree(node->leaf5, depth + 1);
     }
+}
+
+extern void freeTree(Node *tree)
+{
+
+    if (tree == NULL)
+    {
+        return;
+    }
+
+    if (tree->token)
+    {
+        free(tree->token);
+    }
+
+    freeTree(tree->leaf1);
+    freeTree(tree->leaf2);
+    freeTree(tree->leaf3);
+    freeTree(tree->leaf4);
+    freeTree(tree->leaf5);
+
+    free(tree);
 }

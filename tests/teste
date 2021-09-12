@@ -1,6 +1,9 @@
 int i;
 int list f;
 
-int cavalo(int a){
+int cavalo(int a, int b, int c){
+    if(a <= 10){
+        write("OI");
+    }
     return 0;
 }

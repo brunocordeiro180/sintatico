@@ -109,13 +109,11 @@ var_decl:
 	TYPE ID ';' {
 		$$ = createNode("var_decl");
 		
-		Node * aux1 = createNode("\0");
-		aux1->token = allocateToken($1.lexeme, $1.line, $1.column);
-		$$->leaf1 = aux1;
+		$$->leaf1 = createNode("\0");
+		$$->leaf1->token = allocateToken($1.lexeme, $1.line, $1.column);
 
-		Node *aux2 = createNode("\0");
-		aux2->token = allocateToken($2.lexeme, $2.line, $2.column);
-		$$->leaf2 = aux2;
+		$$->leaf2 = createNode("\0");
+		$$->leaf2->token = allocateToken($2.lexeme, $2.line, $2.column);
 
 		insertSymbol(symbolTable, $2.lexeme, $2.line, $2.column, $1.lexeme, "var", $2.scope);
 	}
@@ -157,21 +155,24 @@ fun_decl:
 
 params:
 	params ',' param_decl  {
-		$$ = $3;
+		$$ = createNode("\0");
+		$$->leaf1 = $1;
+		$$->leaf2 = $3;
 	}
 	| param_decl {
-		$$ = createNode("param_decl");
-		$$->leaf1 = $1;
+		$$ = $1;
 	}
 ;
 
 param_decl:
 	TYPE ID {
-		char type[100];
-		strcpy(type, $1.lexeme);
 		
-		$$ = createNode(type);
-		$$->token = allocateToken($2.lexeme, $2.line, $2.column);
+		$$ = createNode("param_decl");
+		$$->leaf1 = createNode("\0");
+		$$->leaf1->token = allocateToken($1.lexeme, $1.line, $1.column);
+
+		$$->leaf2 = createNode("\0");
+		$$->leaf2->token = allocateToken($2.lexeme, $2.line, $2.column);
 
 		insertSymbol(symbolTable, $2.lexeme, $2.line, $2.column, $1.lexeme, "param", (scopeId + 1));
 	}
@@ -200,8 +201,7 @@ statement:
 		$$ = $1;
 	}
 	| var_decl {
-		$$ = createNode("var_decl");
-		$$->leaf1 = $1;
+		$$ = $1;
 	}
 	| for_stmt {
 		$$ = $1;
@@ -228,7 +228,7 @@ exp_stmt:
 		$$ = $1;
 	}
 	| ';' {
-		/* do nothing */
+		$$ = createNode("\0");
 	}
 ;
 
@@ -242,7 +242,7 @@ exp:
 ;
 
 assing_exp:
-	ID ASSIGN exp {
+	ID ASSIGN simple_exp {
 		$$ = createNode("assing_exp");
 
 		Node* aux1 = createNode("\0");
@@ -270,11 +270,13 @@ stmt_list:
 		$$->leaf1 = $1;
 		$$->leaf2 = $2;
 	}
-	|%empty
+	|%empty {
+		$$ = createNode("\0");
+	}
 ;
 
 if_stmt:
-	IF '(' bin_exp ')' statement %prec THEN {
+	IF '(' rel_exp ')' statement %prec THEN {
 		$$ = createNode("if_stmt");
 
 		Node *aux1 = createNode("\0");
@@ -284,8 +286,8 @@ if_stmt:
 		$$->leaf2 = $3;
 		$$->leaf3 = $5;
 	}
-	| IF '(' bin_exp ')' statement ELSE statement {
-		$$ = createNode("if_stmt");
+	| IF '(' rel_exp ')' statement ELSE statement {
+		$$ = createNode("if_else_stmt");
 
 		Node *aux1 = createNode("\0");
 		aux1->token = allocateToken($1.lexeme, $1.line, $1.column);
@@ -374,44 +376,64 @@ simple_exp:
 list_exp:
 	factor ':' factor {
 		$$ = createNode("list_exp");
+
 		$$->leaf1 = $1;
-		$$->token = allocateToken($2.lexeme, $2.line, $2.column);
-		$$->leaf2 = $3;
+		$$->leaf2 = createNode("\0");
+		$$->leaf2->token = allocateToken($2.lexeme, $2.line, $2.column);
+		$$->leaf3 = $3;
 	}
 	| '?' factor {
 		$$ = createNode("list_exp"); 
-		$$->token = allocateToken($1.lexeme, $1.line, $1.column);
-		$$->leaf1 = $2;
+
+		$$->leaf1 = createNode("\0");
+		$$->leaf1->token = allocateToken($1.lexeme, $1.line, $1.column);
+		$$->leaf2 = $2;
 	}
 	| '%' factor {
 		$$ = createNode("list_exp"); 
-		$$->token = allocateToken($1.lexeme, $1.line, $1.column);
-		$$->leaf1 = $2;
+		$$->leaf1 = createNode("\0");
+		$$->leaf1->token = allocateToken($1.lexeme, $1.line, $1.column);
+		$$->leaf2 = $2;
 	}
 	| factor MAP factor {
 		$$ = createNode("list_exp");
 		$$->leaf1 = $1;
-		$$->token = allocateToken($2.lexeme, $2.line, $2.column);
-		$$->leaf2 = $3;
+		$$->leaf2 = createNode("\0");
+		$$->leaf2->token = allocateToken($2.lexeme, $2.line, $2.column);
+		$$->leaf3 = $3;
 	}
 	| factor FILTER factor {
 		$$ = createNode("list_exp");
 		$$->leaf1 = $1;
-		$$->token = allocateToken($2.lexeme, $2.line, $2.column);
-		$$->leaf2 = $3;
+		$$->leaf2 = createNode("\0");
+		$$->leaf2->token = allocateToken($2.lexeme, $2.line, $2.column);
+		$$->leaf3 = $3;
 	}
 ;
 
 bin_exp:
-	bin_exp LOG_OP unary_log_exp
+	bin_exp LOG_OP unary_log_exp {
+		$$ = createNode("bin_exp");
+
+		$$->leaf1 = $1;
+		$$->leaf2 = createNode("\0");
+		$$->leaf2->token = allocateToken($2.lexeme, $2.line, $2.column);
+		$$->leaf3 = $3;
+	}
 	| unary_log_exp {
 		$$ = $1;
 	}
 ;
 
 unary_log_exp:
-	UNARY_LOG_OP unary_log_exp 
-	| EXCLAMATION unary_log_exp
+	EXCLAMATION unary_log_exp {
+		$$ = createNode("unary_log_exp");
+		Node *aux = createNode("\0");
+		aux->token = allocateToken($1.lexeme, $1.line, $1.column);
+
+		$$->leaf1 = aux;
+		$$->leaf2 = $2;
+	}
 	| rel_exp {
 		$$ = $1;
 	}
@@ -421,8 +443,9 @@ rel_exp:
 	rel_exp REL_OP sum_exp {
 		$$ = createNode("rel_exp");
 		$$->leaf1 = $1;
-		$$->token = allocateToken($2.lexeme, $2.line, $2.column);
-		$$->leaf2 = $3;
+		$$->leaf2 = createNode("\0");
+		$$->leaf2->token = allocateToken($2.lexeme, $2.line, $2.column);
+		$$->leaf3 = $3;
 	}
 	| sum_exp {
 		$$ = $1;
@@ -433,8 +456,9 @@ sum_exp:
 	sum_exp SUM_OP mul_exp {
 		$$ = createNode("sum_exp");
 		$$->leaf1 = $1;
-		$$->token = allocateToken($2.lexeme, $2.line, $2.column);
-		$$->leaf2 = $3;
+		$$->leaf2 = createNode("\0");
+		$$->leaf2->token = allocateToken($2.lexeme, $2.line, $2.column);
+		$$->leaf3 = $3;
 	}
 	| mul_exp {
 		$$ = $1;
@@ -446,8 +470,9 @@ mul_exp:
 		$$ = createNode("mul_exp");
 
 		$$->leaf1 = $1;
-		$$->token = allocateToken($2.lexeme, $2.line, $2.column);
-		$$->leaf2 = $3;
+		$$->leaf2 = createNode("\0");
+		$$->leaf2->token = allocateToken($2.lexeme, $2.line, $2.column);
+		$$->leaf3 = $3;
 	}
 	| factor {
 		$$ = $1;
@@ -484,18 +509,27 @@ immutable:
 call:
 	ID '(' args ')' {
 		$$ = createNode("call");
-		$$->token = allocateToken($1.lexeme, $1.line, $1.column);
-		$$->leaf1 = $3;
+		$$->leaf1 = createNode("\0");
+		$$->leaf1->token = allocateToken($1.lexeme, $1.line, $1.column);
+		$$->leaf2 = $3;
 	}
 	| ID '(' ')' {
-		$$ = createNode("\0");
-		$$->token = allocateToken($1.lexeme, $1.line, $1.column);
+		$$ = createNode("call");
+
+		$$->leaf1 = createNode("\0");
+		$$->leaf1->token = allocateToken($1.lexeme, $1.line, $1.column);
 	}
 ;
 
 args: 
-	args ',' simple_exp
-	| simple_exp
+	args ',' simple_exp {
+		$$ = createNode("args");
+		$$->leaf1 = $1;
+		$$->leaf2 = $3;
+	}
+	| simple_exp {
+		$$ = $1;
+	}
 ;
 
 constant:
@@ -529,8 +563,9 @@ int main(int argc, char **argv){
 	initializeScopeStack(scopeStack);
     yyparse();
 	printf("\n\n--------------------------------------------------------------- TREE ---------------------------------------------------------------- \n\n");
-	// printTree(tree, 1);
+	printTree(tree, 1);
 	printSymbolTable(symbolTable);
+	freeTree(tree);
     yylex_destroy();
     return 0;
 }

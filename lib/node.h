@@ -17,5 +17,6 @@ Node;
 
 extern Node* createNode(char* name);
 extern void printTree(Node* node, int depth);
+extern void freeTree(Node *tree);
 
 #endif
