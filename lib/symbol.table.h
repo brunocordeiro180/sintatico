@@ -2,12 +2,12 @@
 #define SYMBOL_TABLE_H
 
 typedef struct symbol{
-    char token[20];
-    char lexeme[50];
-    char type[20];
-    int scope;
     int line;
     int column;
+    int scope;
+    char token[50];
+    char lexeme[150];
+    char type[20];
     char decl[5];
 } Symbol;
 

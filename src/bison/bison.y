@@ -16,6 +16,11 @@ extern int scopeStack[100];
 extern int scopeId;
 SymbolList *symbolTable;
 extern Node *tree;
+extern int linhas;
+extern int colunas;
+
+#define BHRED "\e[1;91m"
+#define RESET "\e[0m"
 %}
 
 %token <token> ID INT FLOAT NIL
@@ -26,7 +31,7 @@ extern Node *tree;
 %token <token> MUL_OP
 %token <token> SUM_OP 
 %token <token> REL_OP
-%token <token> UNARY_LOG_OP EXCLAMATION
+%token <token> EXCLAMATION
 %token <token> LOG_OP 
 %token <token> ':' '?' '%' MAP FILTER
 %right THEN ELSE
@@ -102,6 +107,9 @@ decl:
 	| fun_decl {
 		$$ =  $1;
 	}
+	| error {
+
+	}
 ;
 
 var_decl:
@@ -115,6 +123,9 @@ var_decl:
 		$$->leaf2->token = allocateToken($2.lexeme, $2.line, $2.column);
 
 		insertSymbol($2.lexeme, $2.line, $2.column, $1.lexeme, "var", $2.scope);
+	}
+	| TYPE ID error {
+		
 	}
 ;
 
@@ -263,6 +274,9 @@ stmt_list:
 	}
 	|%empty {
 		$$ = createNode("\0");
+	}
+	|stmt_list error {
+
 	}
 ;
 
@@ -489,6 +503,9 @@ call:
 		$$->leaf1 = createNode("\0");
 		$$->leaf1->token = allocateToken($1.lexeme, $1.line, $1.column);
 	}
+	| ID error {
+
+	}
 ;
 
 args: 
@@ -499,6 +516,9 @@ args:
 	}
 	| simple_exp {
 		$$ = $1;
+	}
+	| error {
+		
 	}
 ;
 
@@ -523,9 +543,10 @@ constant:
 
 %%
 
-extern void yyerror(const char* s)
-{
-	printf("Syntax Error:\n%s\n", s);
+extern void yyerror(const char* s) {
+    printf(BHRED"SYNTAX ERROR -> ");
+    printf("%s ", s);
+	printf("[Line %d, Column %d]\n"RESET, linhas, colunas);
 }
 
 int main(int argc, char **argv){

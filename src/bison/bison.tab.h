@@ -45,7 +45,7 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 70 "src/bison/bison.y"
+#line 74 "src/bison/bison.y"
 
     #include "token.h"
 	#include "node.h"
@@ -77,13 +77,12 @@ extern int yydebug;
     MUL_OP = 271,                  /* MUL_OP  */
     SUM_OP = 272,                  /* SUM_OP  */
     REL_OP = 273,                  /* REL_OP  */
-    UNARY_LOG_OP = 274,            /* UNARY_LOG_OP  */
-    EXCLAMATION = 275,             /* EXCLAMATION  */
-    LOG_OP = 276,                  /* LOG_OP  */
-    MAP = 277,                     /* MAP  */
-    FILTER = 278,                  /* FILTER  */
-    THEN = 279,                    /* THEN  */
-    STRING = 280                   /* STRING  */
+    EXCLAMATION = 274,             /* EXCLAMATION  */
+    LOG_OP = 275,                  /* LOG_OP  */
+    MAP = 276,                     /* MAP  */
+    FILTER = 277,                  /* FILTER  */
+    THEN = 278,                    /* THEN  */
+    STRING = 279                   /* STRING  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -92,12 +91,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 75 "src/bison/bison.y"
+#line 79 "src/bison/bison.y"
 
 	Token token;
 	Node* node;
 
-#line 101 "src/bison/bison.tab.h"
+#line 100 "src/bison/bison.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
