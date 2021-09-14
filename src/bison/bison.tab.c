@@ -3287,7 +3287,7 @@ yyreturn:
 
 
 extern void yyerror(const char* s) {
-    printf(BHRED"SYNTAX ERROR -> ");
+    printf(BHRED"ERROR -> ");
     printf("%s ", s);
 	printf("[Line %d, Column %d]\n"RESET, linhas, colunas);
 	errors++;
@@ -3301,9 +3301,9 @@ int main(int argc, char **argv){
 		printf("\n\n--------------------------------------------------------------- TREE ---------------------------------------------------------------- \n\n");
 		printTree(tree, 1);
 		printSymbolTable(symbolTable);
+		freeTable();
+		freeTree(tree);
 	}
-	freeTree(tree);
-	freeTable();
     yylex_destroy();
     return 0;
 }

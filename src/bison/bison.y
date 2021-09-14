@@ -573,7 +573,7 @@ constant:
 %%
 
 extern void yyerror(const char* s) {
-    printf(BHRED"SYNTAX ERROR -> ");
+    printf(BHRED"ERROR -> ");
     printf("%s ", s);
 	printf("[Line %d, Column %d]\n"RESET, linhas, colunas);
 	errors++;

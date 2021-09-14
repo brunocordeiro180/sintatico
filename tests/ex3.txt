@@ -8,7 +8,7 @@ float int list read_list(int n,  y) {
 	new = NIL;
 	for (i < 1; i < n ; i = i + 1) {
 		int elem;
-		writeln("Digite o elemento da lista: ");
+		writeln(read);
 		read(elem);
 	}
 	return new;

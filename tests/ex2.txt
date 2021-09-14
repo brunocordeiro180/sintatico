@@ -12,8 +12,7 @@ int list teste4;
 
 int narutao(int n, int y) {
 
-    float i;
-	i =  -435.7 * 14.22;
+    float i =  -435.7 * 14.22;
 	teste1 = NIL;
 
     float n;
