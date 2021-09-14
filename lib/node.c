@@ -7,7 +7,7 @@
 #define BHMAG "\e[1;95m"
 #define RESET "\e[0m"
 
-Node *tree;
+Node *tree = NULL;
 
 extern Node *createNode(char *name)
 {
