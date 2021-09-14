@@ -1,47 +1,48 @@
-int list IL;
-float list FL;
-
-int list read_list(int n) {
-    int i;
-    i =  -435.7;
-    int list new;
-    new = NIL;
-    return new;
+int graziane(int x, float list y){
+    y = x : y; 
 }
 
-float succ(int i) {
-    return i+1;
+float belo(float duduNobre){
+    // Dudu Nobre, grande sambista 
+    return (duduNobre + duduNobre * 2 - (duduNobre - 1));
 }
 
-
-int leq_10(float x) {
-    return x <= 10;
+float filter(float diogoNogueira){
+    return diogoNogueira <= (2 * 20 + 1);
 }
 
-
-int main() {
-
-    writeln("Digite os número de elementos da lista: ");
-
+int main(){
+    float list chorao;
     int n;
-    float list FL10;
+    chorao = graziane(2.3, chorao);
     read(n);
-    
-    IL  = read_list(n);
-    FL = succ >> IL;
+    int i;
 
-    FL10 = leq_10 <<  FL;
-    if (FL10 != NIL) {
-        float list AUXL;
-        int n; n = 0;
-        for (AUXL=FL10; AUXL != NIL; AUXL = !AUXL) {
-            n = n + 1;
-            write(?AUXL); write(" ");
-        }
-        writeln(" ");
-        write("A nova lista tem "); write(n); writeln(" elementos.");
+    /* 
+        Leia o livro "Comece pelo porque"
+    */
+
+    chorao = 99.1 : chorao;
+    chorao = 103.2 : chorao;
+    chorao = 8 : chorao;
+    chorao = 5 : chorao; 
+
+    for(i = 0; i < n; i = i +1){
+        chorao = belo >> chorao;
     }
-    else writeln("A nova lista não possui elementos.");
 
-    return 0;
+    float list pericles;
+    pericles = filter << chorao;
+    write("Primeiro elemento: ");
+    write(?chorao);
+
+    write("Ultimo elemento: ");
+    write(!chorao);
+
+    chorao = %chorao; //nao te quero mais 
+
+    write("Primeiro elemento: ");
+    write(?chorao);
+
+    return 2021;
 }

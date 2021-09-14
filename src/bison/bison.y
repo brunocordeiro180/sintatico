@@ -18,6 +18,7 @@ SymbolList *symbolTable;
 extern Node *tree;
 extern int linhas;
 extern int colunas;
+int errors = 0;
 
 #define BHRED "\e[1;91m"
 #define RESET "\e[0m"
@@ -28,10 +29,10 @@ extern int colunas;
 %token <token> ASSIGN FOR
 %token <token> RETURN TYPE
 %token <token> WRITE WRITELN READ
-%token <token> MUL_OP
+%left  <token> MUL_OP
 %token <token> SUM_OP 
 %token <token> REL_OP
-%token <token> EXCLAMATION
+%right <token> EXCLAMATION
 %token <token> LOG_OP 
 %token <token> ':' '?' '%' MAP FILTER
 %right THEN ELSE
@@ -42,6 +43,7 @@ extern int colunas;
 %type <node> decl_list
 %type <node> decl
 %type <node> var_decl
+%type <node> var_decl_with_assing
 %type <node> fun_decl
 %type <node> params
 %type <node> param_decl
@@ -107,10 +109,11 @@ decl:
 	| fun_decl {
 		$$ =  $1;
 	}
-	| error {
-
+	| var_decl_with_assing{
+		$$ = $1;
 	}
 ;
+
 
 var_decl:
 	TYPE ID ';' {
@@ -124,8 +127,24 @@ var_decl:
 
 		insertSymbol($2.lexeme, $2.line, $2.column, $1.lexeme, "var", $2.scope);
 	}
-	| TYPE ID error {
+;
+
+var_decl_with_assing:
+	TYPE ID ASSIGN simple_exp ';'{
+		$$ = createNode("var_decl");
 		
+		$$->leaf1 = createNode("\0");
+		$$->leaf1->token = allocateToken($1.lexeme, $1.line, $1.column);
+
+		$$->leaf2 = createNode("\0");
+		$$->leaf2->token = allocateToken($2.lexeme, $2.line, $2.column);
+
+		$$->leaf3 = createNode("\0");
+		$$->leaf3->token = allocateToken($3.lexeme, $3.line, $3.column);
+
+		$$->leaf4 = $4;
+
+		insertSymbol($2.lexeme, $2.line, $2.column, $1.lexeme, "var", $2.scope);
 	}
 ;
 
@@ -157,6 +176,9 @@ fun_decl:
 
 		insertSymbol($2.lexeme, $2.line, $2.column, $1.lexeme, "fun", $2.scope);
 	}
+	| error {
+
+	}
 ;
 
 params:
@@ -167,6 +189,9 @@ params:
 	}
 	| param_decl {
 		$$ = $1;
+	}
+	| error{
+		
 	}
 ;
 
@@ -209,13 +234,16 @@ statement:
 	| var_decl {
 		$$ = $1;
 	}
+	| var_decl_with_assing {
+		$$ = $1;
+	}
 	| for_stmt {
 		$$ = $1;
 	}
 ;
 
 for_stmt:
-	FOR '(' assing_exp ';' rel_exp ';' assing_exp ')' block_stmt {
+	FOR '(' assing_exp ';' simple_exp ';' assing_exp ')' block_stmt {
 		$$ = createNode("for_stmt");
 
 		$$->leaf1 = createNode("\0");
@@ -225,6 +253,10 @@ for_stmt:
 		$$->leaf4 = $7;
 		$$->leaf5 = $9;
 	}
+	| 	FOR '(' error ';' simple_exp ';' assing_exp ')' block_stmt {
+
+	}
+	
 ;
 
 exp_stmt:
@@ -257,6 +289,9 @@ assing_exp:
 
 		$$->leaf3 = $3;
 	}
+	| ID error {
+
+	}
 ;
 
 block_stmt:
@@ -275,13 +310,13 @@ stmt_list:
 	|%empty {
 		$$ = createNode("\0");
 	}
-	|stmt_list error {
+	| error {
 
 	}
 ;
 
 if_stmt:
-	IF '(' rel_exp ')' statement %prec THEN {
+	IF '(' simple_exp ')' statement %prec THEN {
 		$$ = createNode("if_stmt");
 
 		$$->leaf1 = createNode("\0");;
@@ -289,7 +324,7 @@ if_stmt:
 		$$->leaf2 = $3;
 		$$->leaf3 = $5;
 	}
-	| IF '(' rel_exp ')' statement ELSE statement {
+	| IF '(' simple_exp ')' statement ELSE statement {
 		$$ = createNode("if_else_stmt");
 
 		$$->leaf1 = createNode("\0");;
@@ -503,9 +538,6 @@ call:
 		$$->leaf1 = createNode("\0");
 		$$->leaf1->token = allocateToken($1.lexeme, $1.line, $1.column);
 	}
-	| ID error {
-
-	}
 ;
 
 args: 
@@ -516,9 +548,6 @@ args:
 	}
 	| simple_exp {
 		$$ = $1;
-	}
-	| error {
-		
 	}
 ;
 
@@ -547,15 +576,18 @@ extern void yyerror(const char* s) {
     printf(BHRED"SYNTAX ERROR -> ");
     printf("%s ", s);
 	printf("[Line %d, Column %d]\n"RESET, linhas, colunas);
+	errors++;
 }
 
 int main(int argc, char **argv){
 	initializeTable(symbolTable);
 	initializeScopeStack(scopeStack);
     yyparse();
-	printf("\n\n--------------------------------------------------------------- TREE ---------------------------------------------------------------- \n\n");
-	printTree(tree, 1);
-	printSymbolTable(symbolTable);
+	if(!errors){
+		printf("\n\n--------------------------------------------------------------- TREE ---------------------------------------------------------------- \n\n");
+		printTree(tree, 1);
+		printSymbolTable(symbolTable);
+	}
 	freeTree(tree);
 	freeTable();
     yylex_destroy();

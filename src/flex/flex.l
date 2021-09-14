@@ -274,8 +274,16 @@ ID_NAO_PERMITIDO            [0-9]+{IDENTIFICADOR}|[0-9]+{TIPO_DADO}|[0-9]+{PALAV
 
 [\n]        		    { linhas++; colunas = 1;}
 
-{ID_NAO_PERMITIDO}|.    { printf("\n(%d,%d)\t    " BHRED"Expressao \"%s\" não reconhecida\n\n"RESET, linhas, colunas, yytext); 
-colunas+=yyleng;} 
+{ID_NAO_PERMITIDO}.    { 
+    
+    printf("\n(%d,%d)" BHRED"Expression \"%s\" not recognized\n\n"RESET, linhas, colunas, yytext); 
+    colunas+=yyleng;
+}
+
+. {
+    printf("\n(%d,%d)" BHRED"Expression \"%s\" not recognized\n\n"RESET, linhas, colunas, yytext); 
+    colunas+=yyleng;
+}
 
 %%
 

@@ -1,7 +1,0 @@
-int i;
-int list f;
-float a;
-
-int main(int n){
-    int x;
-}

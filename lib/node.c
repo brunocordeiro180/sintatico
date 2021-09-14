@@ -49,7 +49,7 @@ extern void printTree(Node *node, int depth)
             printf(BHMAG "-" RESET);
         }
 
-        printf(BHMAG "%s " RESET, node->token->lexeme);
+        printf(BHMAG " %s " RESET, node->token->lexeme);
         printf(BHMAG "(%d,%d)\n" RESET, node->token->line, node->token->column);
     }
 
